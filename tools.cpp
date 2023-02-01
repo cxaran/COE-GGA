@@ -15,6 +15,6 @@ double average(const std::vector<int>& numbers) {
     return static_cast<double>(sum(numbers)) / numbers.size();
 }
 
-bool compareMin(const std::vector<int>& a, const std::vector<int>& b) {
-    return *std::min_element(a.begin(), a.end()) > *std::min_element(b.begin(), b.end());
+bool compareMin(const Item& a, const Item& b) {
+    return a.min < b.min;
 }

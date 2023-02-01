@@ -3,9 +3,10 @@
 
 #include <vector>
 #include <algorithm>
+#include "structures.h"
 
 int sum(const std::vector<int>& numbers);
 double average(const std::vector<int>& numbers);
-bool compareMin(const std::vector<int>& a, const std::vector<int>& b);
+bool compareMin(const Item& a, const Item& b);
 
 #endif
