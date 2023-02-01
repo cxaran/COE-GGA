@@ -1,9 +1,24 @@
 #include "structures.h"
 
-void addItemToGroup(Group& group, const Item& item) {
-    for (const auto& i : group.items) if (i.id == item.id) return;
+void printChromosome(const Chromosome& chromosome) {
+    std::cout << "Group information:\n";
+    for (const auto& group : chromosome.groups) {
+        std::cout << "Group ID: " << group.id << " ";
+        std::cout << "Volume: " << group.volume << " ";
+        std::cout << "Items: ";
+        for (const auto& item : group.items) {
+            std::cout << item.id << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "*************************\n";
+}
+
+bool addItemToGroup(Group& group, const Item& item) {
+    for (const auto& i : group.items) if (i.id == item.id) return false;
     group.volume += item.weights[group.id];
     group.items.push_back(item);
+    return true;
 }
 
 bool createNewGroupWithItem(Chromosome& chromosome, const Item& item) {
@@ -14,7 +29,10 @@ bool createNewGroupWithItem(Chromosome& chromosome, const Item& item) {
         chromosome.groups.push_back(group);
         return true;
     }
-    else return false;
+    else {
+        exit(3);
+        return false; 
+    }
 }
 
 void firstFit(Chromosome& chromosome, const std::vector<Item>& items) {
@@ -33,18 +51,38 @@ void firstFit(Chromosome& chromosome, const std::vector<Item>& items) {
 
 void bestFit(Chromosome& chromosome, const std::vector<Item>& items) {
     for (const auto& item : items) {
-        Group bestGroup;
-        int bestFit = chromosome.problem.capacity + 1;
-        for (auto& group : chromosome.groups) {
-            int freeSpace = chromosome.problem.capacity - group.volume;
-            if (item.weights[group.id] <= freeSpace && freeSpace > bestFit) {
+        int bestGroupId = -1;
+        int bestFit = 0;
+        for (int i = 0; i < chromosome.groups.size(); ++i) {
+            int freeSpace = chromosome.problem.capacity - chromosome.groups[i].volume;
+            if (item.weights[chromosome.groups[i].id] <= freeSpace && freeSpace > bestFit) {
                 bestFit = freeSpace;
-                bestGroup = group;
+                bestGroupId = i;
             }
         }
-        if (bestGroup.id!= -1) addItemToGroup(bestGroup, item);
-        else createNewGroupWithItem(chromosome, item);
+        if (bestGroupId != -1) {
+            if (!addItemToGroup(chromosome.groups[bestGroupId], item)) exit(3);
+        }
+        else {
+            if (!createNewGroupWithItem(chromosome, item)) exit(3);
+        }
     }
 }
 
+bool allItemsIncluded(const Chromosome& chromosome) {
+    for (const auto& item : chromosome.problem.items) {
+        bool itemFound = false;
+        for (const auto& group : chromosome.groups) {
+            for (const auto& groupItem : group.items) {
+                if (groupItem.id == item.id) {
+                    itemFound = true;
+                    break;
+                }
+            }
+            if (itemFound) break;
+        }
+        if (!itemFound) return false;
+    }
+    return true;
+}
 

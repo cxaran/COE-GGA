@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <cstdlib>
 
 struct Item {
     int id;
@@ -31,7 +32,9 @@ struct Chromosome {
     double fitness = 0;
 };
 
+void printChromosome(const Chromosome& chromosome);
 void firstFit(Chromosome& chromosome, const std::vector<Item>& items);
 void bestFit(Chromosome& chromosome, const std::vector<Item>& items);
+bool allItemsIncluded(const Chromosome& chromosome);
 
 #endif

@@ -43,8 +43,11 @@ void initializePopulation(const Instance& instance,vector<Chromosome>& populatio
         Chromosome chromosome;
         chromosome.problem = instance;
         //firstFit(chromosome, instance.items);
-        bestFit(chromosome, instance.items);
-        population.push_back(chromosome);
+        bestFit(chromosome, items);
+        if (allItemsIncluded(chromosome)) {
+            population.push_back(chromosome);
+            printChromosome(chromosome);
+        }
         random_shuffle(items.begin(), items.end());
     }
 }
