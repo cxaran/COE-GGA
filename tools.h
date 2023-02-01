@@ -2,7 +2,6 @@
 #define TOOLS_H
 
 #include <vector>
-#include <algorithm>
 #include "structures.h"
 
 int sum(const std::vector<int>& numbers);
