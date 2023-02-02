@@ -18,21 +18,21 @@
     <ClCompile Include="COE-GGA.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="tools.cpp">
+    <ClCompile Include="sources\structures.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="structures.cpp">
+    <ClCompile Include="sources\tools.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tools.h">
+    <ClInclude Include="include\heuristics.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="structures.h">
+    <ClInclude Include="include\structures.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="heuristics.h">
+    <ClInclude Include="include\tools.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,8 +6,8 @@
 #include <vector>
 #include <algorithm>
 
-#include "structures.h"
-#include "tools.h"
+#include "include/structures.h"
+#include "include/tools.h"
 
 using namespace std;
 
@@ -81,7 +81,7 @@ void coevolution(const Instance& instance) {
 }
 
 int main(int argc, char* argv[]) {
-    Instance instance = readInstanceFromFile((argc > 1) ? argv[1] : "D:\\instance.txt");
+    Instance instance = readInstanceFromFile(argv[1]);
     coevolution(instance);
 
     return 0;

@@ -128,13 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="COE-GGA.cpp" />
-    <ClCompile Include="structures.cpp" />
-    <ClCompile Include="tools.cpp" />
+    <ClCompile Include="sources\structures.cpp" />
+    <ClCompile Include="sources\tools.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="heuristics.h" />
-    <ClInclude Include="structures.h" />
-    <ClInclude Include="tools.h" />
+    <ClInclude Include="include\heuristics.h" />
+    <ClInclude Include="include\structures.h" />
+    <ClInclude Include="include\tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
