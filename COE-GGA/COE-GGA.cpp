@@ -80,8 +80,8 @@ void coevolution(const Instance& instance) {
     }
 }
 
-int main() {
-    Instance instance = readInstanceFromFile("D:\\instance.txt");
+int main(int argc, char* argv[]) {
+    Instance instance = readInstanceFromFile((argc > 1) ? argv[1] : "D:\\instance.txt");
     coevolution(instance);
 
     return 0;
