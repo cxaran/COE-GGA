@@ -32,3 +32,4 @@
 
 # Visual Project
 /.vs
+*.log
