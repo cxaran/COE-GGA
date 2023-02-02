@@ -1,2 +1,4 @@
-﻿  COE-GGA.cpp
+﻿  structures.cpp
+C:\Users\cxara\source\repos\COE-GGA\COE-GGA\structures.cpp(41,44): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
+C:\Users\cxara\source\repos\COE-GGA\COE-GGA\structures.cpp(147,44): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
   COE-GGA.vcxproj -> C:\Users\cxara\source\repos\COE-GGA\x64\Debug\COE-GGA.exe

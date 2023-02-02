@@ -6,6 +6,5 @@
 
 int sum(const std::vector<int>& numbers);
 double average(const std::vector<int>& numbers);
-bool compareMin(const Item& a, const Item& b);
 
 #endif

@@ -45,8 +45,9 @@ void initializePopulation(const Instance& instance,vector<Chromosome>& populatio
         //firstFit(chromosome, instance.items);
         bestFit(chromosome, items);
         if (allItemsIncluded(chromosome)) {
+            calculateFitness(chromosome);
             population.push_back(chromosome);
-            printChromosome(chromosome);
+            printChromosome(chromosome, false);
         }
         random_shuffle(items.begin(), items.end());
     }
@@ -59,7 +60,6 @@ void coevolution(const Instance& instance) {
 
 int main() {
     Instance instance = readInstanceFromFile("D:\\instance.txt");
-
     coevolution(instance);
 
     return 0;
