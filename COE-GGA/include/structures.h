@@ -49,6 +49,7 @@ bool compareFitness(const Chromosome& a, const Chromosome& b);
 void printChromosome(const Chromosome& chromosome, bool printGroups);
 void firstFit(Chromosome& chromosome, const std::vector<Item>& items);
 void bestFit(Chromosome& chromosome, const std::vector<Item>& items);
+void bestFitN(Chromosome& chromosome, const std::vector<Item>& items);
 void calculateFitness(Chromosome& chromosome);
 bool allItemsIncluded(const Chromosome& chromosome);
 

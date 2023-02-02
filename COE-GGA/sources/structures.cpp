@@ -12,21 +12,20 @@ bool compareFitness(const Chromosome& a, const Chromosome& b) {
 
 // Función para imprimir la información de un cromosoma.
 void printChromosome(const Chromosome& chromosome, bool printGroups) {
-    std::cout << "Informacion de los grupos:\n";
+    std::cout << "Informacion de la solucion:\n";
     std::cout << "fitness: " << chromosome.fitness.value << "\n";
     std::cout << "maxSpan: " << chromosome.fitness.maxSpan << "\n";
     std::cout << "Tamano de los grupos: " << chromosome.groups.size() << "\n";
     if (printGroups)
         for (const auto& group : chromosome.groups) {
             std::cout << "ID de grupo: " << group.id << " ";
-            std::cout << "Volumen: " << group.volume << " ";
+            std::cout << "Volumen: " << group.volume << "\n";
             std::cout << "Articulos: ";
             for (const auto& item : group.items) {
                 std::cout << item.id << " ";
             }
             std::cout << "\n";
         }
-    std::cout << "*************************\n";
 }
 
 // Función para agregar un objeto a un grupo.
@@ -120,6 +119,49 @@ void bestFit(Chromosome& chromosome, const std::vector<Item>& items) {
         else {
             //Crea un nuevo grupo con el elemento
             if (!createNewGroupWithItem(chromosome, item)) exit(3);
+        }
+    }
+}
+
+// Funcion best fit que separa los N elementos grandes en grupos iniciales
+void bestFitN(Chromosome& chromosome, const std::vector<Item>& items) {
+    //Itera en "items" y verifica si el peso del elemento es mayor a la mitad de la capacidad
+    for (const auto& item : items) {
+        if (item.min > chromosome.problem.capacity / 2) {
+            //Crea un nuevo grupo con el elemento
+            if (!createNewGroupWithItem(chromosome, item)) exit(3);
+            continue;
+        }
+    }
+    //Itera sobre cada elemento en "items"
+    for (const auto& item : items) {
+        if (item.min <= chromosome.problem.capacity / 2) {
+            //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningún grupo)
+            int bestGroupId = -1;
+            //Inicializa el mejor ajuste como 0
+            int bestFit = 0;
+            //Itera sobre cada grupo en "chromosome.groups"
+            for (int i = 0; i < chromosome.groups.size(); ++i) {
+                //Calcula el espacio libre en el grupo actual
+                int freeSpace = chromosome.problem.capacity - chromosome.groups[i].volume;
+                //Si el peso del elemento es menor o igual al espacio libre y el espacio libre es mejor que el mejor ajuste actual
+                if (item.weights[chromosome.groups[i].id] <= freeSpace && freeSpace > bestFit) {
+                    //Actualiza el mejor ajuste
+                    bestFit = freeSpace;
+                    //Actualiza el ID del grupo con el mejor ajuste
+                    bestGroupId = i;
+                }
+            }
+            //Si se encontró un grupo con un mejor ajuste
+            if (bestGroupId != -1) {
+                //Añade el elemento al grupo con el mejor ajuste
+                if (!addItemToGroup(chromosome.groups[bestGroupId], item)) exit(3);
+            }
+            //Si no se encontró un grupo con un mejor ajuste
+            else {
+                //Crea un nuevo grupo con el elemento
+                if (!createNewGroupWithItem(chromosome, item)) exit(3);
+            }
         }
     }
 }

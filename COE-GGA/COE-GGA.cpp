@@ -54,7 +54,8 @@ void initializePopulation(const Instance& instance,vector<Chromosome>& populatio
         Chromosome chromosome;
         chromosome.problem = instance;
         //firstFit(chromosome, instance.items);
-        bestFit(chromosome, items);
+        //bestFit(chromosome, items);
+        bestFitN(chromosome, items);
 
         // Verificar que todos los elementos estén incluidos en el cromosoma
         if (allItemsIncluded(chromosome)) {
@@ -70,20 +71,18 @@ void initializePopulation(const Instance& instance,vector<Chromosome>& populatio
     }
 }
 
-void coevolution(const Instance& instance) {
+Chromosome coevolution(const Instance& instance) {
     vector<Chromosome> population;
     // Inicializar la población
     initializePopulation(instance,population);
     sort(population.begin(), population.end(), compareFitness);
-    for (const auto& solution : population) {
-        printChromosome(solution,false );
-    }
+    return population[0];
 }
 
 int main(int argc, char* argv[]) {
     Instance instance = readInstanceFromFile(argv[1]);
-    coevolution(instance);
-
+    Chromosome solution = coevolution(instance);
+    printChromosome(solution, true);
     return 0;
 }
 

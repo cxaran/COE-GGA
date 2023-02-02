@@ -33,3 +33,9 @@
 # Visual Project
 /.vs
 *.log
+*.tlog
+*.pdb
+*.exe
+*.pdb
+*.ilk
+*.idb
