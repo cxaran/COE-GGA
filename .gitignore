@@ -31,7 +31,6 @@
 *.app
 
 # Visual Project
-.vs
 /.vs
 .suo
 .dylib
