@@ -39,3 +39,4 @@
 *.pdb
 *.ilk
 *.idb
+/COE-GGA/x64/Debug/
