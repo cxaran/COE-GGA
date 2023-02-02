@@ -30,13 +30,13 @@
 *.out
 *.app
 
-#Visual Project
+# Visual Project
+.vs/
 .suo
 .dylib
 .ipch
 .log
 .tlog
-.ikl
 .vsidx
 .pdb
 .suo
