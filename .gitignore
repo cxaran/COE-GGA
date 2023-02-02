@@ -31,7 +31,8 @@
 *.app
 
 # Visual Project
-.vs/
+.vs
+/.vs
 .suo
 .dylib
 .ipch
