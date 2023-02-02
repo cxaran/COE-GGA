@@ -45,6 +45,7 @@ struct Chromosome {
 };
 
 bool compareMin(const Item& a, const Item& b);
+bool compareFitness(const Chromosome& a, const Chromosome& b);
 void printChromosome(const Chromosome& chromosome, bool printGroups);
 void firstFit(Chromosome& chromosome, const std::vector<Item>& items);
 void bestFit(Chromosome& chromosome, const std::vector<Item>& items);

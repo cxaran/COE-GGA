@@ -5,6 +5,11 @@ bool compareMin(const Item& a, const Item& b) {
     return a.min < b.min;
 }
 
+// Función para comparar dos cromosomas según su fitness.
+bool compareFitness(const Chromosome& a, const Chromosome& b) {
+    return a.fitness.value > b.fitness.value;
+}
+
 // Función para imprimir la información de un cromosoma.
 void printChromosome(const Chromosome& chromosome, bool printGroups) {
     std::cout << "Informacion de los grupos:\n";
