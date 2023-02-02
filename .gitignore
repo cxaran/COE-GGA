@@ -32,18 +32,3 @@
 
 # Visual Project
 /.vs
-.suo
-.dylib
-.ipch
-.log
-.tlog
-.vsidx
-.pdb
-*.suo
-*.vsidx
-.vs/COE-GGA/v17/.suo
-*.db
-*.vsidx
-.vs\COE-GGA\
-.vs/COE-GGA/v17/.suo
-.vs/COE-GGA/v17/.suo
