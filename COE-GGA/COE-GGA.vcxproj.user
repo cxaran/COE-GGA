@@ -2,10 +2,10 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>$(ProjectDir)_INPUT\instance.txt</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>$(ProjectDir)_INPUT\debug_instance.txt</LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>$(ProjectDir)_INPUT\instance.txt</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>$(ProjectDir)_INPUT\debug_instance.txt</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>
