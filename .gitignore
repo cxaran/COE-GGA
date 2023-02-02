@@ -39,9 +39,10 @@
 .tlog
 .vsidx
 .pdb
-.suo
+*.suo
 *.vsidx
 .vs/COE-GGA/v17/.suo
 *.db
 *.vsidx
 .vs\COE-GGA\
+.vs/COE-GGA/v17/.suo
