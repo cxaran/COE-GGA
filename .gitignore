@@ -27,6 +27,16 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+#Visual Project
+.suo
+.dylib
+.ipch
+.log
+.tlog
+.ikl
+.vsidx
+.pdb
+.suo
