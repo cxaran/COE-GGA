@@ -34,7 +34,7 @@ Instance readInstanceFromFile(string fileName) {
 
         // Calcular el peso mínimo y agregar el elemento a la instancia
         item.min = *min_element(item.weights.begin(), item.weights.end());
-        instance.items.push_back(item);
+        instance.items.push_back(&item);
     }
 
     // Ordenar los elementos por peso mínimo
@@ -47,15 +47,15 @@ Instance readInstanceFromFile(string fileName) {
 }
 
 // Función para inicializar la población
-void initializePopulation(const Instance& instance,vector<Chromosome>& population) {
-    vector<Item> items = instance.items;
+void initializePopulation(Instance& instance,vector<Chromosome>& population) {
+    vector<Item*> items = instance.items;
     // Generar cromosomas hasta que se alcance el tamaño de población deseado
     while (population.size() < POPULATION_SIZE) {
         Chromosome chromosome;
-        chromosome.problem = instance;
-        //firstFit(chromosome, instance.items);
+        chromosome.problem = &instance;
+        firstFit(chromosome, instance.items);
         //bestFit(chromosome, items);
-        bestFitN(chromosome, items);
+        //bestFitN(chromosome, items);
 
         // Verificar que todos los elementos estén incluidos en el cromosoma
         if (allItemsIncluded(chromosome)) {
@@ -71,7 +71,7 @@ void initializePopulation(const Instance& instance,vector<Chromosome>& populatio
     }
 }
 
-Chromosome coevolution(const Instance& instance) {
+Chromosome coevolution(Instance& instance) {
     vector<Chromosome> population;
     // Inicializar la población
     initializePopulation(instance,population);
@@ -82,7 +82,7 @@ Chromosome coevolution(const Instance& instance) {
 int main(int argc, char* argv[]) {
     Instance instance = readInstanceFromFile(argv[1]);
     Chromosome solution = coevolution(instance);
-    printChromosome(solution, true);
+    printChromosomeAsJson(solution, true);
     return 0;
 }
 

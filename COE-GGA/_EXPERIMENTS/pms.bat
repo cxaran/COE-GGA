@@ -1,28 +1,31 @@
 @echo off
-cls
-setlocal enabledelayedexpansion
+setlocal enableDelayedExpansion
+
+set datetime=%date:~-4,4%-%date:~-7,2%-%date:~-10,2%_%time:~0,2%-%time:~3,2%-%time:~6,2%
+set outputfolder=..\_OUTPUT\resultados_%datetime%
+mkdir %outputfolder%
 
 echo Ruta actual: %cd%
-for /d %%f in (..\_INPUT\pms\*) do (
-pushd %%f
-set sub=%%f
-set sub=!sub:*\_INPUT\pms\=!
-set outputfolder=..\_OUTPUT\!sub!_
-set datetime=%date:~-4,4%-%date:~-7,2%-%date:~-10,2%_%time:~0,2%-%time:~3,2%-%time:~6,2%
-set outputfile=resultados_!datetime!.txt
-md ..\..\!outputfolder! 2>nul
-  echo Procesando Carpeta: %%f
-  for %%i in (*) do (
-    if /i not "%%i"=="list.txt" (
-     echo Procesando archivo: %%i
-     echo Procesando archivo: %%i >> ..\..\!outputfolder!\!outputfile!
-     ..\..\..\..\x64\Debug\COE-GGA.exe "%%i" >> ..\..\!outputfolder!\!outputfile!
+pushd ..\_INPUT\pms
+for /d %%d in (*) do (
+  pushd %%d
+  echo Procesando carpeta: %%d
+  set outputfile=..\..\%outputfolder%\%%d.json
+  echo { >> !outputfile!
+  for %%f in (*) do (
+    if /i not "%%f"=="list.txt" (
+      echo Procesando archivo: %%f
+      echo "%%f": >> !outputfile!
+      ..\..\..\..\x64\Debug\COE-GGA.exe "%%f" >> !outputfile!
+      echo , >> !outputfile!
     )
   )
-popd
+  echo "descripcion":"Archivo de resultados de la carpeta %%d"} >> !outputfile!
+  echo Ver resultados en !outputfile!
+  popd
 )
+popd
 
 echo Proceso finalizado. Ver resultados en %outputfolder%
 pause
-
 
