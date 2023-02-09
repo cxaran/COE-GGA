@@ -13,7 +13,7 @@ using namespace std;
 
 // Constantes
 const int NUM_SPECIES = 2;
-const int POPULATION_SIZE = 100;
+const int POPULATION_SIZE = 5;
 const int NUM_ITERATIONS = 500;
 const double MUTATION_RATE = 0.01;
 
@@ -76,6 +76,9 @@ Chromosome coevolution(Instance& instance) {
     // Inicializar la población
     initializePopulation(instance,population);
     sort(population.begin(), population.end(), compareFitness);
+
+    // Especie 1
+
     return population[0];
 }
 
