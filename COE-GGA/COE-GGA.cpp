@@ -23,18 +23,18 @@ Instance readInstanceFromFile(string fileName) {
     ifstream inputFile(fileName);
     inputFile >> instance.numItems >> instance.numGroups >> instance.capacity >> instance.knowBest;
     // Leer los pesos de cada elemento
-    int weight;
+
+    double weight;
     for (int i = 0; i < instance.numItems; i++) {
-        Item item;
-        item.id = i;
+        Item* item = new Item();
+        item->id = i;
         for (int j = 0; j < instance.numGroups; j++) {
             inputFile >> weight;
-            item.weights.push_back(weight);
+            item->weights.push_back(weight);
         }
-
         // Calcular el peso mínimo y agregar el elemento a la instancia
-        item.min = *min_element(item.weights.begin(), item.weights.end());
-        instance.items.push_back(&item);
+        item->min = *min_element(item->weights.begin(), item->weights.end());
+        instance.items.push_back(item);
     }
 
     // Ordenar los elementos por peso mínimo
