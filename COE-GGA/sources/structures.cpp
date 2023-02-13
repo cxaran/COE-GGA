@@ -2,7 +2,7 @@
 
 // Función para comparar dos articulos según su mínimo.
 bool compareMin(const Item* a, const Item* b) {
-    return a->min < b->min;
+    return a->min > b->min;
 }
 
 // Función para comparar dos cromosomas según su fitness.
@@ -56,7 +56,7 @@ void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups) {
 }
 
 // Función para agregar un objeto a un grupo.
-bool addItemToGroup(Group& group, Item& item) {
+bool addItemToGroup(Group& group,Item& item) {
     // Verificar si el objeto ya está en el grupo.
     for (const auto& i : group.items) if (i->id == item.id) return false;
     // Aumentar el volumen del grupo y agregar el objeto.
@@ -88,7 +88,7 @@ bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
 //agrega al primer grupo en el que su volumen y el volumen del grupo sea 
 //menor o igual a la capacidad máxima permitida.Si ningún grupo cumple con 
 //esta condición, se crea un nuevo grupo con el elemento.
-void firstFit(Chromosome& chromosome,vector<Item*>& items) {
+void firstFit(Chromosome& chromosome,const vector<Item*>& items) {
     //Itera sobre cada elemento en "items"
     for (const auto& item : items) {
         //Marca si el elemento ha sido añadido a un grupo
@@ -97,10 +97,8 @@ void firstFit(Chromosome& chromosome,vector<Item*>& items) {
         for (auto& group : chromosome.groups) {
             //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
             if (group.volume + item->weights[group.id] <= chromosome.problem->capacity) {
-                //Añade el elemento al grupo
-                addItemToGroup(group, *item);
-                //Marca que el elemento ha sido añadido a un grupo
-                added = true;
+                //Marca si el elemento ha sido añadido a un grupo
+                added = addItemToGroup(group, *item);
                 //Detiene la iteración sobre los grupos
                 break;
             }

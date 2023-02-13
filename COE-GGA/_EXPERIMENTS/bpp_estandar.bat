@@ -11,7 +11,7 @@ for %%f in (*) do (
     ..\..\..\x64\Debug\COE-GGA.exe "%%f" >> %outputfile%
     echo , >> %outputfile%
 )
-echo "descripcion":"Archivo de resultados de la carpeta bpp_estandar"} >> %outputfile%
+echo "descripcion":"Archivo de resultados de la carpeta bpp_estandar, FFD"} >> %outputfile%
 popd
 
 echo Proceso finalizado. Ver resultados en %outputfile%

@@ -50,7 +50,7 @@ bool compareMin(const Item* a, const Item* b);
 bool compareFitness(const Chromosome& a, const Chromosome& b);
 void printChromosome(const Chromosome& chromosome, bool printGroups);
 void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups);
-void firstFit(Chromosome& chromosome, vector<Item*>& items);
+void firstFit(Chromosome& chromosome,const vector<Item*>& items);
 void bestFit(Chromosome& chromosome, vector<Item*>& items);
 void bestFitN(Chromosome& chromosome, vector<Item*>& items);
 void calculateFitness(Chromosome& chromosome);
