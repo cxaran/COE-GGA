@@ -44,16 +44,25 @@ struct Chromosome {
     vector<Group> groups; // Grupos
     const Instance* problem; // Instancia del problema
     Fitness fitness; // Aptitud del cromosoma
+    int age; // La edad del cromosoma
 };
+
+// Estructura para una especie
+struct Specie {
+    int id; // El ID único de la especie
+    vector<Chromosome> members; // Los miembros de la especie, un conjunto de cromosomas
+    float size; // El porcentaje de la poblacion global que pertenece a la especie
+};
+
 
 bool compareMin(const Item* a, const Item* b);
 bool compareFitness(const Chromosome& a, const Chromosome& b);
+bool compareVolumeGroups(const Group& a, const Group& b);
 void printChromosome(const Chromosome& chromosome, bool printGroups);
 void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups);
-void firstFit(Chromosome& chromosome,const vector<Item*>& items);
-void bestFit(Chromosome& chromosome, vector<Item*>& items);
-void bestFitN(Chromosome& chromosome, vector<Item*>& items);
 void calculateFitness(Chromosome& chromosome);
 bool allItemsIncluded(const Chromosome& chromosome);
+bool createNewGroupWithItem(Chromosome& chromosome, Item& item);
+bool addItemToGroup(Group& group, Item& item);
 
 #endif

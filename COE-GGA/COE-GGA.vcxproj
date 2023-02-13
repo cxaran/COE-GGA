@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="COE-GGA.cpp" />
+    <ClCompile Include="sources\heuristics.cpp" />
     <ClCompile Include="sources\structures.cpp" />
     <ClCompile Include="sources\tools.cpp" />
   </ItemGroup>
