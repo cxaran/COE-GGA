@@ -14,30 +14,30 @@ using namespace std;
 // Constantes
 const int NUM_SPECIES = 2;
 const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 500;
+const int NUM_ITERATIONS = 50;
 
 // Función para leer una instancia de un archivo
 Instance readInstanceFromFile(string fileName) {
-    Instance instance;
+    Instance* instance = new Instance();
     ifstream inputFile(fileName);
-    inputFile >> instance.numItems >> instance.numGroups >> instance.capacity >> instance.knowBest;
+    inputFile >> instance->numItems >> instance->numGroups >> instance->capacity >> instance->knowBest;
     // Leer los pesos de cada elemento
 
     double weight;
-    for (int i = 0; i < instance.numItems; i++) {
+    for (int i = 0; i < instance->numItems; i++) {
         Item* item = new Item();
         item->id = i;
-        for (int j = 0; j < instance.numGroups; j++) {
+        for (int j = 0; j < instance->numGroups; j++) {
             inputFile >> weight;
             item->weights.push_back(weight);
         }
         // Calcular el peso mínimo y agregar el elemento a la instancia
         item->min = *min_element(item->weights.begin(), item->weights.end());
-        instance.items.push_back(item);
+        instance->items.push_back(item);
     }
     // Cerrar el archivo
     inputFile.close();
-    return instance;
+    return *instance;
 }
 
 // Función para inicializar la población, regresa la poblacion ordenada
@@ -47,21 +47,29 @@ vector<Chromosome> initializePopulation(Instance& instance, int SIZE) {
     // Ordenar los elementos por peso mínimo
     sort(items.begin(), items.end(), compareMin);
     // Generar cromosomas hasta que se alcance el tamaño de población deseado
+    int method = 0;
     while (population.size() < SIZE) {
-        Chromosome chromosome;
-        chromosome.problem = &instance;
-        //firstFit(chromosome, instance.items);
-        bestFit(chromosome, items);
-        //bestFitN(chromosome, items);
+        Chromosome* chromosome = new Chromosome();
+        chromosome->problem = &instance;
+        if(method == 0)firstFit(*chromosome, instance.items);
+        //bestFit(*chromosome, items);
+        if(method == 1)bestFitN(*chromosome, items);
         // Verificar que todos los elementos estén incluidos en el cromosoma
-        if (allItemsIncluded(chromosome)) {
+        if (allItemsIncluded(*chromosome)) {
             // Calcular el fitness del cromosoma
-            calculateFitness(chromosome);
+            calculateFitness(*chromosome);
+            // Busqueda local del cromosoma
+            //reorderByCapacity(*chromosome);
             // Agregar el cromosoma a la población
-            population.push_back(chromosome);
+            chromosome->age = 0;
+            population.push_back(*chromosome);
         }
-        // Mezclar los elementos de forma aleatoria
-        random_shuffle(items.begin(), items.end());
+        method++;
+        if (method > 1) {
+            // Mezclar los elementos de forma aleatoria
+            random_shuffle(items.begin(), items.end());
+            method = 0;
+        }
     }
     sort(population.begin(), population.end(), compareFitness);
     return population;
@@ -80,12 +88,9 @@ Chromosome coevolution(Instance& instance) {
     }
 
     // Repitir ara el número especificado de iteraciones
-    for (int generation = 0; generation < NUM_ITERATIONS; ++generation) {
-        cout << generation << " " << species[0].members.size() << endl;
-
-        geneticAlgorithm(species[0], 0.01, 0.3, 0.7);
-
-       
+    for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
+        geneticAlgorithm(species[0], generation, 0.01, 0.3, 0.8);
+        sort(species[0].members.begin(), species[0].members.end(), compareFitness);
     }
     
     return species[0].members[0];

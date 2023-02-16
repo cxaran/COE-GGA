@@ -12,7 +12,7 @@ using namespace std;
 // Estructura para un artículo
 struct Item {
     int id; // ID del artículo
-    double min; // Mínimo de artículos necesarios
+    double min; // Peso minimo del articulo
     vector<double> weights; // Peso del artículo en cada grupo
 };
 

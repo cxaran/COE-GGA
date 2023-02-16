@@ -79,10 +79,12 @@ bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
         // Agregar el objeto al grupo.
         addItemToGroup(group, item);
         chromosome.groups.push_back(group);
+        //cout << chromosome.groups.size() << endl;
         return true;
     }
     // Salir con un código de error.
     else {
+        cout << chromosome.groups.size() << endl;
         exit(3);
         return false;
     }
