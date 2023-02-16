@@ -11,11 +11,16 @@ void firstFit(Chromosome& chromosome,const vector<Item*>& items) {
         //Marca si el elemento ha sido añadido a un grupo
         bool added = false;
         //Itera sobre cada grupo en "chromosome.groups"
-        for (Group& group : chromosome.groups) {
+        for (int i = 0; i < chromosome.groups.size(); ++i) {
+            // Verificamos el id del grupo
+            if (chromosome.groups[i].id != i) {
+                chromosome.groups[i].id = i;
+                refactorGroupValume(chromosome.groups[i]);
+            }
             //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
-            if (group.volume + item->weights[group.id] <= chromosome.problem->capacity) {
+            if (chromosome.groups[i].volume + item->weights[chromosome.groups[i].id] <= chromosome.problem->capacity) {
                 //Marca si el elemento ha sido añadido a un grupo
-                added = addItemToGroup(group, *item);
+                added = addItemToGroup(chromosome.groups[i], *item);
                 //Detiene la iteración sobre los grupos
                 break;
             }
@@ -34,11 +39,16 @@ void firstFitM(Chromosome& chromosome, float capacity, const vector<Item*>& item
         //Marca si el elemento ha sido añadido a un grupo
         bool added = false;
         //Itera sobre cada grupo en "chromosome.groups"
-        for (Group& group : chromosome.groups) {
+        for (int i = 0; i < chromosome.groups.size(); ++i) {
+            // Verificamos el id del grupo
+            if (chromosome.groups[i].id != i) { 
+                chromosome.groups[i].id = i;
+                refactorGroupValume(chromosome.groups[i]); 
+            }
             //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
-            if (group.volume + item->weights[group.id] <= capacity) {
+            if (chromosome.groups[i].volume + item->weights[chromosome.groups[i].id] <= capacity) {
                 //Marca si el elemento ha sido añadido a un grupo
-                added = addItemToGroup(group, *item);
+                added = addItemToGroup(chromosome.groups[i], *item);
                 //Detiene la iteración sobre los grupos
                 break;
             }
@@ -277,6 +287,7 @@ void geneticAlgorithm(Specie& specie, int GENERATION, float ELITE_SIZE, float CR
     //Inserción por remplazo
     for (int parent : parents_p) {
         specie.members[parent] = *children.back();
+        specie.members[parent].age = GENERATION;
         delete children.back();
         children.pop_back();
     }
@@ -291,6 +302,7 @@ void geneticAlgorithm(Specie& specie, int GENERATION, float ELITE_SIZE, float CR
         //reorderByCapacity(*individual);
         //if (fitness == individual->fitness.value) {
             controlledMutation(*individual);
+            individual->age = GENERATION;
             calculateFitness(*individual);
             //if (allItemsIncluded(*individual)) calculateFitness(*individual);
             //else {
