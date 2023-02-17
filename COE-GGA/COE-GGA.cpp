@@ -12,9 +12,9 @@
 using namespace std;
 
 // Constantes
-const int NUM_SPECIES = 2;
+const int NUM_SPECIES = 1;
 const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 50;
+const int NUM_ITERATIONS = 500;
 
 // Función para leer una instancia de un archivo
 Instance readInstanceFromFile(string fileName) {
@@ -89,8 +89,8 @@ Chromosome coevolution(Instance& instance) {
 
     // Repitir ara el número especificado de iteraciones
     for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-        geneticAlgorithm(species[0], generation, 0.01, 0.3, 0.8);
-        sort(species[0].members.begin(), species[0].members.end(), compareFitness);
+        cout << generation << endl;
+        geneticAlgorithm(species[0], generation, 0.01, 0.8, 0.0);
     }
     
     return species[0].members[0];

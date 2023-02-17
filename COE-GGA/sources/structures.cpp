@@ -140,7 +140,7 @@ bool allItemsIncluded(const Chromosome& chromosome) {
 }
 
 
-void refactorGroupValume(Group& group) {
+void refactorGroupVolume(Group& group) {
     group.volume = 0;
     for (const Item* item : group.items) {
         group.volume += item->weights[group.id];

@@ -64,6 +64,6 @@ void calculateFitness(Chromosome& chromosome);
 bool allItemsIncluded(const Chromosome& chromosome);
 bool createNewGroupWithItem(Chromosome& chromosome, Item& item);
 bool addItemToGroup(Group& group, Item& item);
-void refactorGroupValume(Group& group);
+void refactorGroupVolume(Group& group);
 
 #endif

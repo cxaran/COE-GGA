@@ -25,7 +25,7 @@ void geneticAlgorithm(Specie& specie, int GENERATIOS, float ELITE_SIZE, float MU
 //void localSearch(const Problem& problem, const Chromosome& initialSolution);
 
 // Función que aplica el algoritmo First Fit con capacidad modificada
-void reorderByCapacity(Chromosome& chromosome);
+bool reorderByCapacity(Chromosome& chromosome);
 
 #endif
 
