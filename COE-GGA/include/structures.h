@@ -10,7 +10,7 @@
 using namespace std;
 
 // Estructura para un artículo
-struct Item {
+struct Item { // trabajo
     int id; // ID del artículo
     double min; // Peso minimo del articulo
     vector<double> weights; // Peso del artículo en cada grupo
@@ -26,7 +26,7 @@ struct Instance {
 };
 
 // Estructura para un grupo
-struct Group {
+struct Group { //maquinas
     int id = -1; // ID del grupo
     double volume = 0; // Volumen del grupo
     vector<Item*> items; // Artículos en el grupo

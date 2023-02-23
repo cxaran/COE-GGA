@@ -8,7 +8,6 @@
 
 #include "include/structures.h"
 #include "include/heuristics.h"
-#include "include/localSearch.h"
 using namespace std;
 
 // Constantes
@@ -79,7 +78,7 @@ Chromosome coevolution(Instance& instance) {
 
     // Species
     vector<Specie> species;
-    for (int i = 0; i < NUM_SPECIES; i++){
+    for (int i = 0; i < NUM_SPECIES; i++) {
         Specie specie;
         specie.id = i;
         specie.size = POPULATION_SIZE / NUM_SPECIES;
@@ -88,15 +87,11 @@ Chromosome coevolution(Instance& instance) {
     }
 
     // Repitir ara el número especificado de iteraciones
-    //for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-       //cout << generation << endl;
-       // geneticAlgorithm(species[0], generation, 0.01, 0.8, 0.0);}
-        
-    //}
-
-    Chromosome newSol = localSearch(species[0].members[0]);
-    
-    return newSol;
+    for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
+        cout << generation << endl;
+        geneticAlgorithm(species[0], generation, 0.01, 0.8, 0.0);
+    }
+    return species[0].members[0];
 }
 
 int main(int argc, char* argv[]) {
