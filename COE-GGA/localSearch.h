@@ -15,7 +15,7 @@ using namespace std;
 
 void swapJobs(Group machine1, Group machines2, Item item1, Item item2);
 
-int checkMoveSpan(Group machine); ///
+int checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item job_to_move); /// a probar
 
 int finalMakeSpan(Chromosome chromosome); ///////// listo
 
