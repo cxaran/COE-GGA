@@ -14,7 +14,7 @@ using namespace std;
 // Constantes
 const int NUM_SPECIES = 1;
 const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 500;
+const int NUM_ITERATIONS = 100;
 
 // Función para leer una instancia de un archivo
 Instance readInstanceFromFile(string fileName) {
@@ -22,7 +22,6 @@ Instance readInstanceFromFile(string fileName) {
     ifstream inputFile(fileName);
     inputFile >> instance->numItems >> instance->numGroups >> instance->capacity >> instance->knowBest;
     // Leer los pesos de cada elemento
-
     double weight;
     for (int i = 0; i < instance->numItems; i++) {
         Item* item = new Item();
@@ -51,15 +50,12 @@ vector<Chromosome> initializePopulation(Instance& instance, int SIZE) {
     while (population.size() < SIZE) {
         Chromosome* chromosome = new Chromosome();
         chromosome->problem = &instance;
-        if(method == 0)firstFit(*chromosome, instance.items);
-        //bestFit(*chromosome, items);
-        if(method == 1)bestFitN(*chromosome, items);
+        if (method == 0) firstFit(*chromosome, instance.items);
+        if(method == 1)bestFit(*chromosome, items);
         // Verificar que todos los elementos estén incluidos en el cromosoma
         if (allItemsIncluded(*chromosome)) {
             // Calcular el fitness del cromosoma
             calculateFitness(*chromosome);
-            // Busqueda local del cromosoma
-            //reorderByCapacity(*chromosome);
             // Agregar el cromosoma a la población
             chromosome->age = 0;
             population.push_back(*chromosome);
@@ -89,11 +85,17 @@ Chromosome coevolution(Instance& instance) {
 
     // Repitir ara el número especificado de iteraciones
     for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-        cout << generation << endl;
-        geneticAlgorithm(species[0], generation, 0.01, 0.8, 0.0);
+        //cout << generation << " " << species[0].members[0].groups.size() << endl;
+        geneticAlgorithm(species[0], generation, 0.1, 0.22, 0.82);
+        if (species[0].members[0].groups.size() <= instance.knowBest) break;
     }
-    
-    return species[0].members[0];
+
+    // Verificar la solucion
+    sort(species[0].members.begin(), species[0].members.end(), compareFitness);
+    if (allItemsIncluded(species[0].members[0]))
+        return species[0].members[0];
+    else exit(3);
+    return Chromosome();
 }
 
 int main(int argc, char* argv[]) {

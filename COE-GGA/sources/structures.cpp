@@ -7,7 +7,7 @@ bool compareMin(const Item* a, const Item* b) {
 
 // Función para comparar dos cromosomas según su fitness.
 bool compareFitness(const Chromosome& a, const Chromosome& b) {
-    return a.fitness.value > b.fitness.value;
+        return a.fitness.value > b.fitness.value;
 }
 
 // Función para comparar dos grupos segun su volumen.
@@ -63,7 +63,10 @@ void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups) {
 // Función para agregar un objeto a un grupo.
 bool addItemToGroup(Group& group,Item& item) {
     // Verificar si el objeto ya está en el grupo.
-    for (const auto& i : group.items) if (i->id == item.id) return false;
+    for (const auto& i : group.items) if (i->id == item.id) { 
+        exit(3);
+        return false; 
+    }
     // Aumentar el volumen del grupo y agregar el objeto.
     group.volume += item.weights[group.id];
     group.items.push_back(&item);
@@ -79,12 +82,10 @@ bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
         // Agregar el objeto al grupo.
         addItemToGroup(group, item);
         chromosome.groups.push_back(group);
-        //cout << chromosome.groups.size() << endl;
         return true;
     }
     // Salir con un código de error.
     else {
-        cout << chromosome.groups.size() << endl;
         exit(3);
         return false;
     }
