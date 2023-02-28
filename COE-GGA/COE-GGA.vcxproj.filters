@@ -41,7 +41,7 @@
     <ClInclude Include="include\tools.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="localSearch.h">
+    <ClInclude Include="localsearch.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

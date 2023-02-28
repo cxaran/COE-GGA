@@ -9,34 +9,34 @@
 
 using namespace std;
 
-// Estructura para un artículo
+// Estructura para un artï¿½culo
 struct Item { // trabajo
-    int id; // ID del artículo
+    int id; // ID del artï¿½culo
     double min; // Peso minimo del articulo
-    vector<double> weights; // Peso del artículo en cada grupo
+    vector<double> weights; // Peso del artï¿½culo en cada grupo
 };
 
 // Estructura para una instancia de un problema
 struct Instance {
-    int numItems; // Número de artículos
-    int numGroups; // Número de grupos
+    int numItems; // Nï¿½mero de artï¿½culos
+    int numGroups; // Nï¿½mero de grupos
     int capacity; // Capacidad de los grupos
-    int knowBest; // Mejor solución conocida
-    vector<Item*> items; // Artículos
+    int knowBest; // Mejor soluciï¿½n conocida
+    vector<Item*> items; // Artï¿½culos
 };
 
 // Estructura para un grupo
 struct Group { //maquinas
     int id = -1; // ID del grupo
     double volume = 0; // Volumen del grupo
-    vector<Item*> items; // Artículos en el grupo
+    vector<Item*> items; // Artï¿½culos en el grupo
 };
 
 // Estructura para la aptitud de un cromosoma
 struct Fitness {
     double value = 0; // Valor de la aptitud
-    int bins = 0; // Número de grupos
-    double maxSpan = 0; // Máximo tamaño de los grupos
+    int bins = 0; // Nï¿½mero de grupos
+    double maxSpan = 0; // Mï¿½ximo tamaï¿½o de los grupos
 };
 
 // Estructura para un cromosoma
@@ -49,7 +49,7 @@ struct Chromosome {
 
 // Estructura para una especie
 struct Specie {
-    int id; // El ID único de la especie
+    int id; // El ID ï¿½nico de la especie
     vector<Chromosome> members; // Los miembros de la especie, un conjunto de cromosomas
     float size; // El porcentaje de la poblacion global que pertenece a la especie
 };

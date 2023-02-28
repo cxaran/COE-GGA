@@ -1,5 +1,5 @@
-#ifndef HEURISTICS_H
-#define HEURISTICS_H
+#ifndef LOCAL_H
+#define LOCAL_H
 
 #include <vector>
 #include <set>
@@ -7,28 +7,38 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-#include "../structures.h"
+#include "include/structures.h"
 
 using namespace std;
 
-//void removeJob(Group machine, Item item, int item_id);
-
+//Funcion para mover trabajos
 void swapJobs(Group machine1, Group machines2, Item item1, Item item2);
 
-int checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item job_to_move); /// a probar
+//Funcion para checar si mejora mover el span
+int checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item job_to_move); 
 
-int finalMakeSpan(Chromosome chromosome); ///////// listo
+//Funcion para calcular el makespan final
+int finalMakeSpan(Chromosome chromosome);
 
-void swapTwoJobs(); //?
+//Funcion principal del localSearch
+void main_localSearch(Chromosome chromosome); 
 
-void oneJobRoutine(); 
+//Funcion para intercambiar 2 trabajos
+void swapTwoJobs();
 
+//Rutina para mover un trabajo
+void oneJobRoutine(Chromosome chromosome);
+
+//Rutina para mover intercambiar un trabajo
 void oneByOneSwapRoutine();
 
-int uniquePairs();//? retorna una lista de pares unicos de los numeros 
+//Funcion para generar pares
+int uniquePairs();
 
+//Funcion de ayuda para mover trabajos
 void twoRoutineHelper();
 
+//Funcion de ayuda para mover 2 trabajos
 void twoByTwoRoutine();
 
 #endif

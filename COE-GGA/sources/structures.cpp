@@ -1,21 +1,21 @@
-#include "../structures.h"
+#include "../include/structures.h"
 
-// Función para comparar dos articulos según su mínimo.
+// Funciï¿½n para comparar dos articulos segï¿½n su mï¿½nimo.
 bool compareMin(const Item* a, const Item* b) {
     return a->min > b->min;
 }
 
-// Función para comparar dos cromosomas según su fitness.
+// Funciï¿½n para comparar dos cromosomas segï¿½n su fitness.
 bool compareFitness(const Chromosome& a, const Chromosome& b) {
     return a.fitness.value > b.fitness.value;
 }
 
-// Función para comparar dos grupos segun su volumen.
+// Funciï¿½n para comparar dos grupos segun su volumen.
 bool compareVolumeGroups(const Group& a, const Group& b) {
     return a.volume > b.volume;
 }
 
-// Función para imprimir la información de un cromosoma.
+// Funciï¿½n para imprimir la informaciï¿½n de un cromosoma.
 void printChromosome(const Chromosome& chromosome, bool printGroups) {
     cout << "Informacion de la solucion:\n";
     cout << "fitness: " << chromosome.fitness.value << "\n";
@@ -60,9 +60,9 @@ void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups) {
     cout << "}" << endl;
 }
 
-// Función para agregar un objeto a un grupo.
+// Funciï¿½n para agregar un objeto a un grupo.
 bool addItemToGroup(Group& group,Item& item) {
-    // Verificar si el objeto ya está en el grupo.
+    // Verificar si el objeto ya estï¿½ en el grupo.
     for (const auto& i : group.items) if (i->id == item.id) return false;
     // Aumentar el volumen del grupo y agregar el objeto.
     group.volume += item.weights[group.id];
@@ -70,9 +70,9 @@ bool addItemToGroup(Group& group,Item& item) {
     return true;
 }
 
-// Función para crear un nuevo grupo y agregar un objeto a él.
+// Funciï¿½n para crear un nuevo grupo y agregar un objeto a ï¿½l.
 bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
-    // Verificar si todavía se pueden crear más grupos.
+    // Verificar si todavï¿½a se pueden crear mï¿½s grupos.
     if (chromosome.groups.size() < chromosome.problem->numGroups) {
         Group group;
         group.id = chromosome.groups.size();
@@ -82,7 +82,7 @@ bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
         //cout << chromosome.groups.size() << endl;
         return true;
     }
-    // Salir con un código de error.
+    // Salir con un cï¿½digo de error.
     else {
         cout << chromosome.groups.size() << endl;
         exit(3);
@@ -90,23 +90,23 @@ bool createNewGroupWithItem(Chromosome& chromosome, Item& item) {
     }
 }
 
-// Función para calcular la aptitud de un cromosoma
+// Funciï¿½n para calcular la aptitud de un cromosoma
 void calculateFitness(Chromosome& chromosome) {
     Fitness fitness;
     for (const auto& group : chromosome.groups) {
-        ++fitness.bins; // Incrementamos el número de grupos
-        fitness.maxSpan = max(fitness.maxSpan, group.volume); // Actualizamos el tamaño máximo de los grupos
+        ++fitness.bins; // Incrementamos el nï¿½mero de grupos
+        fitness.maxSpan = max(fitness.maxSpan, group.volume); // Actualizamos el tamaï¿½o mï¿½ximo de los grupos
         fitness.value += pow( group.volume / double(chromosome.problem->capacity) , 2);
     }
     fitness.value = fitness.value / fitness.bins; // Calculamos el valor de la aptitud
     chromosome.fitness = fitness;
 }
 
-// Función para calcular la aptitud de un cromosoma
-//Proporción de espacio vacío : aquí, el fitness sería la 
-//proporción de espacio vacío en cada contenedor.El 
-//objetivo sería tener la mayor proporción posible, por 
-//lo que el fitness más alto sería 1.
+// Funciï¿½n para calcular la aptitud de un cromosoma
+//Proporciï¿½n de espacio vacï¿½o : aquï¿½, el fitness serï¿½a la 
+//proporciï¿½n de espacio vacï¿½o en cada contenedor.El 
+//objetivo serï¿½a tener la mayor proporciï¿½n posible, por 
+//lo que el fitness mï¿½s alto serï¿½a 1.
 void calculateFitness3( Chromosome& chromosome) {
     Fitness fitness;
     int totalVolume = 0;
@@ -121,7 +121,7 @@ void calculateFitness3( Chromosome& chromosome) {
     chromosome.fitness = fitness;
 }
 
-//Función que determina si todos los elementos están incluidos en un cromosoma.
+//Funciï¿½n que determina si todos los elementos estï¿½n incluidos en un cromosoma.
 bool allItemsIncluded(const Chromosome& chromosome) {
     for (const Item* item : chromosome.problem->items) {
         bool itemFound = false;

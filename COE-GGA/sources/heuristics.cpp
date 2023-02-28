@@ -1,17 +1,17 @@
-#include "../heuristics.h"
+#include "../include/heuristics.h"
 
-//"firstFit" es una función que asigna elementos a grupos en un cromosoma.
-//La función recibe un cromosoma y un vector de elementos.Cada elemento se 
+//"firstFit" es una funciï¿½n que asigna elementos a grupos en un cromosoma.
+//La funciï¿½n recibe un cromosoma y un vector de elementos.Cada elemento se 
 //agrega al primer grupo en el que su volumen y el volumen del grupo sea 
-//menor o igual a la capacidad máxima permitida.Si ningún grupo cumple con 
-//esta condición, se crea un nuevo grupo con el elemento.
+//menor o igual a la capacidad mï¿½xima permitida.Si ningï¿½n grupo cumple con 
+//esta condiciï¿½n, se crea un nuevo grupo con el elemento.
 void firstFit(Chromosome& chromosome,const vector<Item*>& items) {
     // Comprueba el orden de los contenedores
     if (!is_sorted(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups))
         sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
     //Itera sobre cada elemento en "items"
     for (Item* item : items) {
-        //Marca si el elemento ha sido añadido a un grupo
+        //Marca si el elemento ha sido aï¿½adido a un grupo
         bool added = false;
         //Itera sobre cada grupo en "chromosome.groups"
         for (int i = 0; i < chromosome.groups.size(); ++i) {
@@ -20,15 +20,15 @@ void firstFit(Chromosome& chromosome,const vector<Item*>& items) {
                 chromosome.groups[i].id = i;
                 refactorGroupVolume(chromosome.groups[i]);
             }
-            //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
+            //Si el volumen del grupo mï¿½s el peso del elemento es menor o igual a la capacidad del problema
             if (chromosome.groups[i].volume + item->weights[chromosome.groups[i].id] <= chromosome.problem->capacity) {
-                //Marca si el elemento ha sido añadido a un grupo
+                //Marca si el elemento ha sido aï¿½adido a un grupo
                 added = addItemToGroup(chromosome.groups[i], *item);
-                //Detiene la iteración sobre los grupos
+                //Detiene la iteraciï¿½n sobre los grupos
                 break;
             }
         }
-        //Si el elemento no ha sido añadido a ningún grupo
+        //Si el elemento no ha sido aï¿½adido a ningï¿½n grupo
         if (!added) {
             //Crea un nuevo grupo con el elemento
             createNewGroupWithItem(chromosome, *item);
@@ -42,7 +42,7 @@ void firstFitM(Chromosome& chromosome, float capacity, const vector<Item*>& item
         sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
     //Itera sobre cada elemento en "items"
     for (Item* item : items) {
-        //Marca si el elemento ha sido añadido a un grupo
+        //Marca si el elemento ha sido aï¿½adido a un grupo
         bool added = false;
         //Itera sobre cada grupo en "chromosome.groups"
         for (int i = 0; i < chromosome.groups.size(); ++i) {
@@ -51,15 +51,15 @@ void firstFitM(Chromosome& chromosome, float capacity, const vector<Item*>& item
                 chromosome.groups[i].id = i;
                 refactorGroupVolume(chromosome.groups[i]); 
             }
-            //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
+            //Si el volumen del grupo mï¿½s el peso del elemento es menor o igual a la capacidad del problema
             if (chromosome.groups[i].volume + item->weights[chromosome.groups[i].id] <= capacity) {
-                //Marca si el elemento ha sido añadido a un grupo
+                //Marca si el elemento ha sido aï¿½adido a un grupo
                 added = addItemToGroup(chromosome.groups[i], *item);
-                //Detiene la iteración sobre los grupos
+                //Detiene la iteraciï¿½n sobre los grupos
                 break;
             }
         }
-        //Si el elemento no ha sido añadido a ningún grupo
+        //Si el elemento no ha sido aï¿½adido a ningï¿½n grupo
         if (!added) {
             //Crea un nuevo grupo con el elemento
             createNewGroupWithItem(chromosome, *item);
@@ -67,10 +67,10 @@ void firstFitM(Chromosome& chromosome, float capacity, const vector<Item*>& item
     }
 }
 
-//"bestFit" es una función que también asigna elementos a grupos en un 
+//"bestFit" es una funciï¿½n que tambiï¿½n asigna elementos a grupos en un 
 //cromosoma.Sin embargo, en lugar de agregar el elemento al primer 
-//grupo que cumpla con la condición de capacidad, busca el grupo con 
-//la mejor capacidad restante y agrega el elemento allí.Si ningún 
+//grupo que cumpla con la condiciï¿½n de capacidad, busca el grupo con 
+//la mejor capacidad restante y agrega el elemento allï¿½.Si ningï¿½n 
 //grupo tiene capacidad suficiente, se crea un nuevo grupo.
 void bestFit(Chromosome& chromosome,const vector<Item*>& items) {
     // Comprueba el orden de los contenedores
@@ -78,7 +78,7 @@ void bestFit(Chromosome& chromosome,const vector<Item*>& items) {
         sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
     //Itera sobre cada elemento en "items"
     for (Item* item : items) {
-        //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningún grupo)
+        //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningï¿½n grupo)
         int bestGroupId = -1;
         //Inicializa el mejor ajuste como 0
         int bestFit = 0;
@@ -94,12 +94,12 @@ void bestFit(Chromosome& chromosome,const vector<Item*>& items) {
                 bestGroupId = i;
             }
         }
-        //Si se encontró un grupo con un mejor ajuste
+        //Si se encontrï¿½ un grupo con un mejor ajuste
         if (bestGroupId != -1) {
-            //Añade el elemento al grupo con el mejor ajuste
+            //Aï¿½ade el elemento al grupo con el mejor ajuste
             if (!addItemToGroup(chromosome.groups[bestGroupId], *item)) exit(3);
         }
-        //Si no se encontró un grupo con un mejor ajuste
+        //Si no se encontrï¿½ un grupo con un mejor ajuste
         else {
             //Crea un nuevo grupo con el elemento
             if (!createNewGroupWithItem(chromosome, *item)) exit(3);
@@ -123,7 +123,7 @@ void bestFitN(Chromosome& chromosome, vector<Item*>& items) {
     //Itera sobre cada elemento en "items"
     for (Item* item : items) {
         if (item->min <= chromosome.problem->capacity / 2) {
-            //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningún grupo)
+            //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningï¿½n grupo)
             int bestGroupId = -1;
             //Inicializa el mejor ajuste como 0
             int bestFit = 0;
@@ -139,12 +139,12 @@ void bestFitN(Chromosome& chromosome, vector<Item*>& items) {
                     bestGroupId = i;
                 }
             }
-            //Si se encontró un grupo con un mejor ajuste
+            //Si se encontrï¿½ un grupo con un mejor ajuste
             if (bestGroupId != -1) {
-                //Añade el elemento al grupo con el mejor ajuste
+                //Aï¿½ade el elemento al grupo con el mejor ajuste
                 if (!addItemToGroup(chromosome.groups[bestGroupId], *item)) exit(3);
             }
-            //Si no se encontró un grupo con un mejor ajuste
+            //Si no se encontrï¿½ un grupo con un mejor ajuste
             else {
                 //Crea un nuevo grupo con el elemento
                 if (!createNewGroupWithItem(chromosome, *item)) exit(3);
@@ -154,7 +154,7 @@ void bestFitN(Chromosome& chromosome, vector<Item*>& items) {
 }
 
 
-// Función de selección controlada
+// Funciï¿½n de selecciï¿½n controlada
 int controlledSelection(int chromosomesSize, float size, bool start) {
     int numIndividuos = chromosomesSize * size;
     if (numIndividuos < 1) return start ? 0 : chromosomesSize - 1;
@@ -163,7 +163,7 @@ int controlledSelection(int chromosomesSize, float size, bool start) {
     return randomIndex;
 }
 
-// Función de cruza controlada
+// Funciï¿½n de cruza controlada
 Chromosome* controlledCrossover(const Chromosome& a, const Chromosome& b) {
     Chromosome* child = new Chromosome();
     child->problem = a.problem;
@@ -203,7 +203,7 @@ Chromosome* controlledCrossover(const Chromosome& a, const Chromosome& b) {
     return child;
 }
 
-// Función que realiza el reacomodo por pares
+// Funciï¿½n que realiza el reacomodo por pares
 void pairWiseReassignment(Chromosome& chromosome, vector<Item*>& items) {
     // Recorremos cada grupo
     for (auto& group : chromosome.groups) {
@@ -226,7 +226,7 @@ void pairWiseReassignment(Chromosome& chromosome, vector<Item*>& items) {
     }
 }
 
-// Función de muta controlada
+// Funciï¿½n de muta controlada
 void controlledMutation(Chromosome& chromosome) {
     // Seleccione un grupo aleatorio para ser eliminado.
     if (chromosome.groups.size() > 0) {
@@ -250,7 +250,7 @@ void controlledMutation(Chromosome& chromosome) {
     }
 }
 
-// Función que aplica el algoritmo First Fit con capacidad modificada
+// Funciï¿½n que aplica el algoritmo First Fit con capacidad modificada
 bool reorderByCapacity(Chromosome& chromosome) {
     float resize[] = {0.408, 0.333, 0.342, 0.498, 1.008, 0.294};
     vector<Item*> freeItems;
@@ -285,10 +285,10 @@ bool reorderByCapacity(Chromosome& chromosome) {
     return false;
 }
 
-// Función que resuelve el problema mediante una estrategia genética
+// Funciï¿½n que resuelve el problema mediante una estrategia genï¿½tica
 void geneticAlgorithm(Specie& specie, int GENERATION, float ELITE_SIZE, float CROSSOVER_RATE, float MUTATION_RATE) {
     // CRUZA
-    // Seleccionamos los mejores individuos como padres élite para la cruza
+    // Seleccionamos los mejores individuos como padres ï¿½lite para la cruza
     vector<int> parents_e;
     for (int i = 0; i < specie.members.size() * CROSSOVER_RATE; i++)
         parents_e.push_back(controlledSelection(specie.members.size(), ELITE_SIZE, true));
@@ -302,7 +302,7 @@ void geneticAlgorithm(Specie& specie, int GENERATION, float ELITE_SIZE, float CR
         children.push_back(controlledCrossover(specie.members[parents_e[i]], specie.members[parents_p[i]]));
         children.back()->age = GENERATION;
     }
-    //Inserción por remplazo controlado
+    //Inserciï¿½n por remplazo controlado
     for (int i = specie.members.size() -1; !children.empty() && i > specie.members.size() * ELITE_SIZE; i--){
         if (specie.members[i].age < GENERATION) {
             specie.members[i] = *children.back();
