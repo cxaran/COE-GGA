@@ -14,7 +14,7 @@ using namespace std;
 // Constantes
 const int NUM_SPECIES = 1;
 const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 10;
+const int NUM_ITERATIONS = 3;
 
 // Función para leer una instancia de un archivo
 Instance readInstanceFromFile(string fileName) {
@@ -89,7 +89,7 @@ Chromosome coevolution(Instance& instance) {
 
     // Repitir ara el número especificado de iteraciones
     for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-        cout << generation << endl;
+        cout << "gen:" <<generation << " " << endl;
         main_localSearch(species[0].members[0]);
     }
     return species[0].members[0];

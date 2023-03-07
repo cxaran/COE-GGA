@@ -18,7 +18,7 @@ bool DeleteItemToGroup(Group& group, Item& item);
 bool isDone(vector<bool> d_list);
 
 //Funcion para mover un trabajo a otra maquina
-bool moveJob(Group origin_machine, Group target_machine, Item* job_to_move);
+bool moveJob(Group& origin_machine, Group& target_machine, Item* job_to_move);
 
 //Funcion para checar si mejora mover el span
 bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item* job_to_move);
@@ -42,7 +42,7 @@ bool swapJobs(Group origin_machine, Group target_machine, Item* origin_job, Item
 bool createNewGroupWithoutItem(Chromosome& chromosome);
 
 //Rutina para mover un trabajo
-void oneJobRoutine(Chromosome chromosome);
+void oneJobRoutine(Chromosome& chromosome);
 
 //Rutina para mover intercambiar un trabajo
 void oneByOneSwapRoutine(Chromosome chromosome);

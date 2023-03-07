@@ -20,10 +20,13 @@ double finalMakeSpan(Chromosome chromosome) {
 bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item* job_to_move) {
 	//Se obtiene makespan actual
 	double cur_span = finalMakeSpan(chromo);
+	//cout << "cur" << cur_span << " ";
 	//Span de maquina de origen
 	double origin_span = origin_machine.volume;
+	//cout << "cur" << origin_span << " ";
 	//Span de maquina objetivo
 	double target_span = target_machine.volume;
+	//cout << "target" << target_span << " ";
 	//Maximo local
 	double local_max_span;
 	//Nuevo maximo local
@@ -38,6 +41,7 @@ bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine
 	}
 	//Se obtiene Span del trabajo a mover
 	double job_span = job_to_move->weights[origin_machine.id];
+	//cout << "job" << job_span<< " ";
 
 	//Se obtiene el nuevo maximo local
 	if (origin_span - job_span < target_span + job_span) {
@@ -66,7 +70,8 @@ bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine
 }
 
 //Mueve un trabajo a otra maquina
-bool moveJob(Group origin_machine, Group target_machine, Item* job_to_move) {
+bool moveJob(Group& origin_machine, Group& target_machine, Item* job_to_move) {
+	//cout << job_to_move->id;
 	bool item_deleted = DeleteItemToGroup(origin_machine, *job_to_move);
 	bool added = addItemToGroup(target_machine, *job_to_move);
 	return true;
@@ -88,7 +93,7 @@ bool DeleteItemToGroup(Group& group, Item& item) {
 //Identifica si la lista de maquinas se trabajo completa
 bool isDone(vector<bool> d_list) {
 	bool checks = all_of(d_list.begin(), d_list.end(), [](bool elemento) {
-		return !elemento;
+		return elemento;
 		});
 	return checks;
 }
@@ -110,7 +115,7 @@ bool createNewGroupWithoutItem(Chromosome& chromosome) {
 	}
 }
 //Rutina para mover un trabajo a otra maquina
-void oneJobRoutine(Chromosome chromosome) {
+void oneJobRoutine(Chromosome& chromosome) {
 	bool done = false;
 	bool move_or_not_to_move = false;
 	bool moved = false;
@@ -123,6 +128,7 @@ void oneJobRoutine(Chromosome chromosome) {
 			bool adde = createNewGroupWithoutItem(chromosome);
 		}
 	}
+	//cout << "maquinas" << chromosome.groups.size() << " ";
 	while (!done) {
 		//Se obtiene makespan actual
 		double prev_makespan = finalMakeSpan(chromosome);
@@ -130,24 +136,32 @@ void oneJobRoutine(Chromosome chromosome) {
 		vector<bool> done_list(maquinas);
 		for (int i = 0; i < maquinas; i++)
 		{
+			//cout << "it:" << i << " ";
 			for (int j = 0; j < chromosome.groups[i].items.size(); j++)
 			{
-				cout << chromosome.groups[i].items.size() << " ";
+				//cout << "it:" << j << " ";
 				for (int k = 1; k < maquinas; k++)
 				{
+					//cout << "it:" << k << " ";
 					//Checa si representa una mejoria mover el trabajo a otra maquina
-					bool move_or_not_to_move = checkMoveSpan(chromosome, chromosome.groups[i], chromosome.groups[(i + 1) % maquinas], chromosome.groups[i].items[j]);
+					move_or_not_to_move = checkMoveSpan(chromosome, chromosome.groups[i], chromosome.groups[(i + 1) % maquinas], chromosome.groups[i].items[j]);
 					if (move_or_not_to_move == true) {
 						//Mueve el trabajo a otra maquina
-						bool moved = moveJob(chromosome.groups[i], chromosome.groups[(i + 1) % maquinas], chromosome.groups[i].items[j]);
-					}
-					//Actualiza vector booleano 
-					if (moved == true) {
-						if (done_list[chromosome.groups[i].id] == false) {
-							done_list[chromosome.groups[i].id] = true;
+						moved = moveJob(chromosome.groups[i], chromosome.groups[(i + 1) % maquinas], chromosome.groups[i].items[j]);
+						/*Group target = chromosome.groups[(i + 1) % maquinas];
+							for (int i = 0; i < target.items.size(); i++) {
+								cout << "item" << target.items[i]->id << " ";
+							}
+						cout << "FINAL" << " "; */
+						//Actualiza vector booleano 
+						if (moved == true) {
+							//cout << "ott:"<< chromosome.groups[i].id << " ";
+							if (done_list[chromosome.groups[i].id] == false) {
+								done_list[chromosome.groups[i].id] = true;
+							}
 						}
+						break;
 					}
-					break;
 				}
 			}
 			//Si el anterior makespan es mayor que el actual se actualiza el valor
@@ -157,6 +171,8 @@ void oneJobRoutine(Chromosome chromosome) {
 			//Si todas las maquinas fueron procesadas se termina el proceso.
 			if (isDone(done_list)) {
 				done = true;
+				cout << prev_makespan << " ";
+				//cout << "it:" << done << " ";
 				break;
 			}
 		}
@@ -240,7 +256,7 @@ void oneByOneSwapRoutine(Chromosome chromosome) {
 					
 						if (move_or_not_to_move == true) {
 							moved = swapJobs(chromosome.groups[i], target_machine, chromosome.groups[i].items[j], chromosome.groups[i].items[z]);
-							move_at_least_once == true;
+							move_at_least_once = true;
 							if (moved==true) {
 								break_flag = true;
 								break;
