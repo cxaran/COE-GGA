@@ -65,5 +65,4 @@ bool allItemsIncluded(const Chromosome& chromosome);
 bool createNewGroupWithItem(Chromosome& chromosome, Item& item);
 bool addItemToGroup(Group& group, Item& item);
 void refactorGroupVolume(Group& group);
-
 #endif

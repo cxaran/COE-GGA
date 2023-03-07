@@ -99,6 +99,7 @@ void oneJobRoutine(Chromosome chromosome) {
 	//Numeros de maquinas
 	int maquinas = chromosome.problem->numGroups;
 	//Itera hasta que todas las maquinas se hayan procesado
+	cout << "num_maquinas" << maquinas << " ";
 	while (!done) {
 		//Se obtiene makespan actual
 		double prev_makespan = finalMakeSpan(chromosome);
