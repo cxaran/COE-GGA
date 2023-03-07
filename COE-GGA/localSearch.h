@@ -14,6 +14,12 @@ using namespace std;
 //Funcion para eliminar item
 bool DeleteItemToGroup(Group& group, Item& item);
 
+//Funcion para identificar si se terminaron de procesar todas las maquinas
+bool isDone(vector<bool> d_list);
+
+//Funcion para mover un trabajo a otra maquina
+bool moveJob(Group origin_machine, Group target_machine, Item* job_to_move);
+
 //Funcion para checar si mejora mover el span
 bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item* job_to_move);
 
@@ -31,6 +37,9 @@ bool checkSwapSpan(Chromosome chromosome, Group machine, Group target_machine, I
 
 //Intercambiar tareas entre 2 maquinas
 bool swapJobs(Group origin_machine, Group target_machine, Item* origin_job, Item* target_job);
+
+// Funcion para crear un nuevo grupo sin item
+bool createNewGroupWithoutItem(Chromosome& chromosome);
 
 //Rutina para mover un trabajo
 void oneJobRoutine(Chromosome chromosome);

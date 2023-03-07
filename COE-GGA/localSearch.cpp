@@ -87,10 +87,28 @@ bool DeleteItemToGroup(Group& group, Item& item) {
 
 //Identifica si la lista de maquinas se trabajo completa
 bool isDone(vector<bool> d_list) {
-	bool all_false = all_of(d_list.begin(), d_list.end(), [](bool i) {return i == true; });
-	return all_false;
+	bool checks = all_of(d_list.begin(), d_list.end(), [](bool elemento) {
+		return !elemento;
+		});
+	return checks;
 }
-
+// Funcion para crear un nuevo grupo sin item
+bool createNewGroupWithoutItem(Chromosome& chromosome) {
+	// Verificar si todav�a se pueden crear m�s grupos.
+	if (chromosome.groups.size() < chromosome.problem->numGroups) {
+		Group group;
+		group.id = chromosome.groups.size();
+		chromosome.groups.push_back(group);
+		//cout << chromosome.groups.size() << endl;
+		return true;
+	}
+	// Salir con un c�digo de error.
+	else {
+		cout << chromosome.groups.size() << endl;
+		exit(3);
+		return false;
+	}
+}
 //Rutina para mover un trabajo a otra maquina
 void oneJobRoutine(Chromosome chromosome) {
 	bool done = false;
@@ -99,12 +117,17 @@ void oneJobRoutine(Chromosome chromosome) {
 	//Numeros de maquinas
 	int maquinas = chromosome.problem->numGroups;
 	//Itera hasta que todas las maquinas se hayan procesado
-	cout << "num_maquinas" << maquinas << " ";
+	int groups_chromo = chromosome.groups.size();
+	if (groups_chromo != maquinas) {
+		for (int i = groups_chromo; i <maquinas ;i++) {
+			bool adde = createNewGroupWithoutItem(chromosome);
+		}
+	}
 	while (!done) {
 		//Se obtiene makespan actual
 		double prev_makespan = finalMakeSpan(chromosome);
 		//Se crea vector booleano que se usara para identificar que cada una de las maquinas se haya trabajado.
-		vector<bool> done_list(maquinas, false);
+		vector<bool> done_list(maquinas);
 		for (int i = 0; i < maquinas; i++)
 		{
 			for (int j = 0; j < chromosome.groups[i].items.size(); j++)
@@ -187,9 +210,10 @@ bool checkSwapSpan(Chromosome chromosome,Group machine,Group target_machine,Item
 bool swapJobs(Group origin_machine,Group target_machine,Item* origin_job,Item* target_job) {
 	bool item_deleted = DeleteItemToGroup(origin_machine, *origin_job);
 	bool added = addItemToGroup(target_machine, *origin_job);
-	bool item_deleted = DeleteItemToGroup(target_machine, *target_job);
-	bool added = addItemToGroup(origin_machine, *target_job);
+	bool item_deleted2 = DeleteItemToGroup(target_machine, *target_job);
+	bool added2 = addItemToGroup(origin_machine, *target_job);
 	//posible error direccion de memoria -- temp
+	return true;
 }
 
 void oneByOneSwapRoutine(Chromosome chromosome) {
