@@ -11,35 +11,47 @@
 
 using namespace std;
 
-//Funcion para mover trabajos
-void swapJobs(Group machine1, Group machines2, Item item1, Item item2);
+//Funcion para eliminar item
+bool DeleteItemToGroup(Group& group, Item& item);
 
 //Funcion para checar si mejora mover el span
-int checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item job_to_move); 
+bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item* job_to_move);
 
 //Funcion para calcular el makespan final
-int finalMakeSpan(Chromosome chromosome);
+double finalMakeSpan(Chromosome chromosome);
 
 //Funcion principal del localSearch
 void main_localSearch(Chromosome chromosome); 
 
 //Funcion para intercambiar 2 trabajos
-void swapTwoJobs();
+bool swapTwoJobs(Group origin_machine, Group target_machine, vector<Item*>pair1, vector<Item*>pair2);
+
+//Funcion para checar si mover el trabajo a otra maquina representa una mejoria
+bool checkSwapSpan(Chromosome chromosome, Group machine, Group target_machine, Item* origin_job, Item* target_job);
+
+//Intercambiar tareas entre 2 maquinas
+bool swapJobs(Group origin_machine, Group target_machine, Item* origin_job, Item* target_job);
 
 //Rutina para mover un trabajo
 void oneJobRoutine(Chromosome chromosome);
 
 //Rutina para mover intercambiar un trabajo
-void oneByOneSwapRoutine();
+void oneByOneSwapRoutine(Chromosome chromosome);
 
 //Funcion para generar pares
-int uniquePairs();
+vector<vector<Item*>> uniquePairs(vector<Item*> source, int maquinas);
 
 //Funcion de ayuda para mover trabajos
-void twoRoutineHelper();
+bool twoRoutineHelper(Chromosome chromosome, Group machine, int num_trabajos, int maquinas);
 
 //Funcion de ayuda para mover 2 trabajos
-void twoByTwoRoutine();
+void twoByTwoSwapRoutine(Chromosome chromosome);
+
+//Funcion para generar pares aleatorios
+vector<vector<Item*>> rand_pair(vector<Item*> source, int num_par);
+
+//Funcion para checar si mover el par de trabajos a otras maquinas representa mejoria
+bool checkTwoSwapSpan(Chromosome chromosome, Group origin_machine, Group target_machine, vector<Item*>pair1, vector<Item*>pair2);
 
 #endif
 

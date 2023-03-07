@@ -14,7 +14,7 @@ using namespace std;
 // Constantes
 const int NUM_SPECIES = 1;
 const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 500;
+const int NUM_ITERATIONS = 10;
 
 // Función para leer una instancia de un archivo
 Instance readInstanceFromFile(string fileName) {
