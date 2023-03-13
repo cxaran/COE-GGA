@@ -21,22 +21,22 @@ bool isDone(vector<bool> d_list);
 bool moveJob(Group& origin_machine, Group& target_machine, Item* job_to_move);
 
 //Funcion para checar si mejora mover el span
-bool checkMoveSpan(Chromosome chromo, Group origin_machine, Group target_machine, Item* job_to_move);
+bool checkMoveSpan(Chromosome& chromo, Group& origin_machine, Group& target_machine, Item* job_to_move);
 
 //Funcion para calcular el makespan final
-double finalMakeSpan(Chromosome chromosome);
+double finalMakeSpan(Chromosome& chromosome);
 
 //Funcion principal del localSearch
-void main_localSearch(Chromosome chromosome); 
+void main_localSearch(Chromosome& chromosome); 
 
 //Funcion para intercambiar 2 trabajos
 bool swapTwoJobs(Group origin_machine, Group target_machine, vector<Item*>pair1, vector<Item*>pair2);
 
 //Funcion para checar si mover el trabajo a otra maquina representa una mejoria
-bool checkSwapSpan(Chromosome chromosome, Group machine, Group target_machine, Item* origin_job, Item* target_job);
+bool checkSwapSpan(Chromosome& chromosome, Group& machine, Group& target_machine, Item* origin_job, Item* target_job);
 
 //Intercambiar tareas entre 2 maquinas
-bool swapJobs(Group origin_machine, Group target_machine, Item* origin_job, Item* target_job);
+bool swapJobs(Group& origin_machine, Group& target_machine, Item* origin_job, Item* target_job);
 
 // Funcion para crear un nuevo grupo sin item
 bool createNewGroupWithoutItem(Chromosome& chromosome);
@@ -45,7 +45,7 @@ bool createNewGroupWithoutItem(Chromosome& chromosome);
 void oneJobRoutine(Chromosome& chromosome);
 
 //Rutina para mover intercambiar un trabajo
-void oneByOneSwapRoutine(Chromosome chromosome);
+void oneByOneSwapRoutine(Chromosome& chromosome);
 
 //Funcion para generar pares
 vector<vector<Item*>> uniquePairs(vector<Item*> source, int maquinas);
