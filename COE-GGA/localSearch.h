@@ -30,7 +30,7 @@ double finalMakeSpan(Chromosome& chromosome);
 void main_localSearch(Chromosome& chromosome); 
 
 //Funcion para intercambiar 2 trabajos
-bool swapTwoJobs(Group origin_machine, Group target_machine, vector<Item*>pair1, vector<Item*>pair2);
+bool swapTwoJobs(Group& origin_machine, Group& target_machine, vector<Item*>pair1, vector<Item*>pair2);
 
 //Funcion para checar si mover el trabajo a otra maquina representa una mejoria
 bool checkSwapSpan(Chromosome& chromosome, Group& machine, Group& target_machine, Item* origin_job, Item* target_job);
@@ -51,16 +51,16 @@ void oneByOneSwapRoutine(Chromosome& chromosome);
 vector<vector<Item*>> uniquePairs(vector<Item*> source, int maquinas);
 
 //Funcion de ayuda para mover trabajos
-bool twoRoutineHelper(Chromosome chromosome, Group machine, int num_trabajos, int maquinas);
+bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, int maquinas);
 
 //Funcion de ayuda para mover 2 trabajos
-void twoByTwoSwapRoutine(Chromosome chromosome);
+void twoByTwoSwapRoutine(Chromosome& chromosome);
 
 //Funcion para generar pares aleatorios
 vector<vector<Item*>> rand_pair(vector<Item*> source, int num_par);
 
 //Funcion para checar si mover el par de trabajos a otras maquinas representa mejoria
-bool checkTwoSwapSpan(Chromosome chromosome, Group origin_machine, Group target_machine, vector<Item*>pair1, vector<Item*>pair2);
+bool checkTwoSwapSpan(Chromosome& chromosome, Group& origin_machine, Group& target_machine, vector<Item*>pair1, vector<Item*>pair2);
 
 #endif
 
