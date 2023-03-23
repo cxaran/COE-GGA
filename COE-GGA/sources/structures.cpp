@@ -75,7 +75,16 @@ bool addItemGrouptoGroup(Group& group, Item& item, Group& group2) {
     // Verificar si el objeto ya est� en el grupo.
     for (const auto& i : group.items) if (i->id == item.id) return false;
     // Aumentar el volumen del grupo y agregar el objeto.
-    group.volume += item.weights[group2.id];
+    group.volume += item.min;
+    group.items.push_back(&item);
+    return true;
+}
+
+bool aux_add_item(Group& group, Item& item) {
+    //cout << "probar" << item.weights[group2.id] << "\n";
+     // Verificar si el objeto ya est� en el grupo.
+    for (const auto& i : group.items) if (i->id == item.id) return false;
+    //agregar el objeto.
     group.items.push_back(&item);
     return true;
 }

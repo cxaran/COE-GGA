@@ -47,6 +47,8 @@ void oneJobRoutine(Chromosome& chromosome);
 //Rutina para mover intercambiar un trabajo
 void oneByOneSwapRoutine(Chromosome& chromosome);
 
+//Reordenar los items en grupos del chromosoma
+void reorder_chromosome(Chromosome& chromosome);
 //Funcion para generar pares
 vector<vector<Item*>> uniquePairs(vector<Item*> source, int maquinas);
 

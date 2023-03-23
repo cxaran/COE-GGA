@@ -89,7 +89,7 @@ Chromosome coevolution(Instance& instance) {
 
     // Repitir ara el número especificado de iteraciones
     for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-        cout << "gen:" <<generation << " " << endl;
+       // cout << "gen:" <<generation << " " << endl;
         main_localSearch(species[0].members[0]);
     }
     return species[0].members[0];
