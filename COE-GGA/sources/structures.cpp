@@ -165,3 +165,9 @@ void refactorGroupVolume(Group& group) {
         group.volume += item->weights[group.id];
     }
 }
+void refactorGroupVolume_bestk(Group& group) {
+    group.volume = 0;
+    for (const Item* item : group.items) {
+        group.volume += item->min;
+    }
+}

@@ -67,4 +67,5 @@ bool addItemToGroup(Group& group, Item& item);
 bool addItemGrouptoGroup(Group& group, Item& item,Group& group2);
 bool aux_add_item(Group& group, Item& item);
 void refactorGroupVolume(Group& group);
+void refactorGroupVolume_bestk(Group& group);
 #endif

@@ -1,6 +1,8 @@
 #include "include/heuristics.h"
 #include "localsearch.h"
 #include <random>
+
+
 using namespace std;
 //Determina el maximo makespan actual
 double finalMakeSpan(Chromosome& chromosome) {
@@ -129,6 +131,7 @@ void oneJobRoutine(Chromosome& chromosome) {
 	bool done = false;
 	bool move_or_not_to_move = false;
 	bool moved = false;
+	int iter = 0;
 	//Numeros de maquinas
 	int maquinas = chromosome.problem->numGroups;
 	//Itera hasta que todas las maquinas se hayan procesado
@@ -137,7 +140,7 @@ void oneJobRoutine(Chromosome& chromosome) {
 		//Se obtiene makespan actual
 		double prev_makespan = finalMakeSpan(chromosome);
 		//cout << "after" << prev_makespan << "\n";
-		int iter = 0;
+		iter = iter + 1;
 		//Se crea vector booleano que se usara para identificar que cada una de las maquinas se haya trabajado.
 		vector<bool> done_list(maquinas);
 		for (int i = 0; i < maquinas; i++)
@@ -181,7 +184,7 @@ void oneJobRoutine(Chromosome& chromosome) {
 				prev_makespan = finalMakeSpan(chromosome);
 			}
 			//Si todas las maquinas fueron procesadas se termina el proceso.
-			if (isDone(done_list) || i>=1) {
+			if (isDone(done_list)|| iter>=4 ) {
 				done = true;
 				//cout << prev_makespan << " ";
 				calculateFitness(chromosome);
@@ -327,16 +330,39 @@ void oneByOneSwapRoutine(Chromosome& chromosome) {
 }
 
 bool checkTwoSwapSpan(Chromosome& chromosome,Group& origin_machine,Group& target_machine,vector<Item*>pair1,vector<Item*>pair2) {
-	Item* first = origin_machine.items[pair1[0]->id];
-	Item* second = origin_machine.items[pair1[1]->id];
-	Item* third = target_machine.items[pair2[0]->id];
-	Item* fourth = target_machine.items[pair2[1]->id];
+	int first_indx=0;
+	int second_indx=0;
+	int third_indx=0;
+	int fourth_indx=0;
+	for (int i = 0; i < origin_machine.items.size();i++) {
+		if (origin_machine.items[i]->id == pair1[0]->id) {
+			first_indx = i;
+		}
+		if (origin_machine.items[i]->id == pair1[1]->id) {
+			second_indx = i;
+		}
+	}
+	for (int j = 0; j < target_machine.items.size();j++) {
+		if (target_machine.items[j]->id == pair2[0]->id) {
+			third_indx = j;
+		}
+		if (target_machine.items[j]->id == pair2[1]->id) {
+			fourth_indx = j;
+		}
+	}
+	Item* first = origin_machine.items[first_indx];
+	Item* second = origin_machine.items[second_indx];
+	Item* third = target_machine.items[third_indx];
+	Item* fourth = target_machine.items[fourth_indx];
 
 	double cur_span = finalMakeSpan(chromosome);
+	//cout << cur_span << "\n";
 	//Span de maquina de origen
 	double origin_span = origin_machine.volume;
+	//cout << "origin" << origin_span <<"\n";
 	//Span de maquina objetivo
 	double target_span = target_machine.volume;
+	//cout << "target" << target_span << "\n";
 	//Maximo local
 	double local_max_span;
 	//Nuevo maximo local
@@ -349,15 +375,20 @@ bool checkTwoSwapSpan(Chromosome& chromosome,Group& origin_machine,Group& target
 		//Remplaza valor del maximo local (origin_span)
 		local_max_span = origin_span;
 	}
-	if (origin_span-(first->weights[origin_machine.id])-(second->weights[origin_machine.id])+(third->weights[target_machine.id])+(fourth->weights[target_machine.id]) <
-		target_span-(third->weights[target_machine.id])-(fourth->weights[target_machine.id])+(first->weights[origin_machine.id])+(second->weights[origin_machine.id])) {
+	//cout << "local" << local_max_span << "\n";
+	//cout << "job" << pair1[0]->id << "\n";
+	//cout << "firs" << first->min << "second" << second->min << "third" << third->min << "fourth" << fourth->min << "\n";
+	if (origin_span-(first->min)-(second->min)+(third->min)+(fourth->min) <
+		target_span-(third->min)-(fourth->min)+(first->min)+(second->min)) {
 
-		new_local_max_span = target_span - (third->weights[target_machine.id]) - (fourth->weights[target_machine.id]) + (first->weights[origin_machine.id]) + (second->weights[origin_machine.id]);
+		new_local_max_span = target_span - (third->min) - (fourth->min) + (first->min) + (second->min);
 	}
 	else {
-		new_local_max_span = origin_span - (first->weights[origin_machine.id]) - (second->weights[origin_machine.id]) + (third->weights[target_machine.id]) + (fourth->weights[target_machine.id]);
+		new_local_max_span = origin_span - (first->min) - (second->min) + (third->min) + (fourth->min);
 
 	}
+	//cout << "new_local" << new_local_max_span << "\n";
+
 	if (new_local_max_span < cur_span) {
 		if (new_local_max_span < local_max_span) {
 			return true;
@@ -388,18 +419,30 @@ bool twoRoutineHelper(Chromosome& chromosome,Group& machine,int num_trabajos,int
 	vector<vector<Item*>>target_pairs;
 	bool move_or_not_to_move = false;
 	bool moved = false;
-	if (num_trabajos<400) {
-		origin_pairs = uniquePairs(machine.items,maquinas);
-	
+	/*for (int x = 0; x < machine.items.size(); x++) {
+		cout << machine.items[x]->id << " ";
+	}*/
+	if (num_trabajos<=400) {
+		origin_pairs = uniquePairs(machine.items, maquinas);
+		/*for (int i = 0; i < origin_pairs.size(); i++) {
+			for (int j = 0; j < origin_pairs[i].size(); j++) {
+				cout << origin_pairs[i][j]->id << " ";
+			}
+			cout << endl;
+		}*/
 		for (auto const& pair1 : origin_pairs) {
+			//cout << pair1[0]->id <<"p" <<pair1[1]->id << " ";
+			
 			for (int i = 1; i < maquinas ; i++) {
+				
 				Group target_machine = chromosome.groups[(machine.id+i) % maquinas];
 				target_pairs = uniquePairs(chromosome.groups[(machine.id+i) % maquinas].items,maquinas);
-
 				for (auto const& pair2 : target_pairs) {
-					//move_or_not_to_move = checkTwoSwapSpan(chromosome,machine,target_machine,pair1,pair2);
+					move_or_not_to_move = checkTwoSwapSpan(chromosome,machine, chromosome.groups[(machine.id + i) % maquinas],pair1,pair2);
+					//cout << move_or_not_to_move;
 					if (move_or_not_to_move==true) {
-						//moved = swapTwoJobs(machine, chromosome.groups[(machine.id + i) % maquinas],pair1,pair2);
+						//cout << move_or_not_to_move << " ";
+						moved = swapTwoJobs(machine, chromosome.groups[(machine.id + i) % maquinas],pair1,pair2);
 						if (moved==true) {
 							return true;
 
@@ -408,24 +451,35 @@ bool twoRoutineHelper(Chromosome& chromosome,Group& machine,int num_trabajos,int
 				}
 			}
 		}
+		calculateFitness(chromosome);
 	}
 	else {
 		int size_items = machine.items.size();
-		const int porcentaje_par = 19.0;
-		int formula = porcentaje_par / (porcentaje_par + size_items);
+		//cout << size_items <<"-";
+		double porcentaje_par = 19;
+		double p_par = porcentaje_par + size_items;
+		//cout << "s" << p_par << "s";
+		double formula = porcentaje_par / p_par;
+		//cout << "f" << formula;
 		int num_par = size_items * formula;
+	//	cout << "num_par"<<num_par << "par";
 		origin_pairs = rand_pair(machine.items,num_par);
 		for (auto const& pair1 : origin_pairs) {
 			for (int i = 1; i < maquinas; i++) {
 				Group target_machine = chromosome.groups[(i + 1) % maquinas];
 				int size_items2= target_machine.items.size();
-				int formula = porcentaje_par / (porcentaje_par + size_items2);
-				int num_par = size_items2 * formula;
-				target_pairs = rand_pair(machine.items, num_par);
+				//cout << "i" << i << "size" << size_items2 << "\n";
+				formula = porcentaje_par / (porcentaje_par + size_items2);
+				num_par = size_items2 * formula;
+				if (size_items2 == 0) {
+					moved = moveJob(machine, chromosome.groups[(i + 1) % maquinas], pair1[0]);
+					return true;
+				}
+				target_pairs = rand_pair(chromosome.groups[(i + 1) % maquinas].items, num_par);
 				for (auto const& pair2 : target_pairs) {
 					move_or_not_to_move = checkTwoSwapSpan(chromosome, machine, target_machine, pair1, pair2);
 					if (move_or_not_to_move == true) {
-						moved = swapTwoJobs(machine, target_machine, pair1, pair2);
+						moved = swapTwoJobs(machine, chromosome.groups[(i + 1) % maquinas], pair1, pair2);
 						if (moved == true) {
 							return true;
 
@@ -435,6 +489,7 @@ bool twoRoutineHelper(Chromosome& chromosome,Group& machine,int num_trabajos,int
 			}
 		}
 	}
+	calculateFitness(chromosome);
 	return false;
 }
 
@@ -458,9 +513,13 @@ vector<vector<Item*>> rand_pair(vector<Item*> source,int num_par) {
 }
 vector<vector<Item*>> uniquePairs(vector<Item*> source,int maquinas) {
 vector<vector<Item*>>result;
+if (source.size() < 2) {
+	return result; // Devolver un vector vacío si no hay suficientes elementos
+}
 for (int i = 0; i <source.size() ;i++) {
 	for (int j = i+1; j < source.size() ; j++) {
 		result.push_back({source[i],source[j]});
+		//cout << " " << result[i][j];
 	}
 }
 return result;
@@ -478,9 +537,9 @@ void twoByTwoSwapRoutine(Chromosome& chromosome) {
 		double prev_makespan = finalMakeSpan(chromosome);
 		for (int i = 0; i <maquinas ;i++) {
 			if (i==0) {
-				machine_one_counter += 1;}
-				swapped = true;
-		
+				machine_one_counter += 1;
+			}
+			swapped = true;
 			while (swapped==true) {
 				swapped = twoRoutineHelper(chromosome,chromosome.groups[i],num_trabajos,maquinas);
 		}
@@ -514,7 +573,7 @@ void reorder_chromosome(Chromosome& chromosome) {
 		chromosome.groups[i].volume = 0;
 	}
 	for (int i = 0; i < chromosome.groups.size(); i++) {
-		refactorGroupVolume(chromosome.groups[i]);
+		refactorGroupVolume_bestk(chromosome.groups[i]);
 	}
 }
 void main_localSearch(Chromosome& chromosome) {
@@ -531,5 +590,5 @@ void main_localSearch(Chromosome& chromosome) {
 	reorder_chromosome(chromosome);
 	oneJobRoutine(chromosome);
 	oneByOneSwapRoutine(chromosome);
-	//twoByTwoSwapRoutine(chromosome);
+twoByTwoSwapRoutine(chromosome);
 }

@@ -1,0 +1,605 @@
+{
+    "1011.txt": {
+        "best_cmax": "10158"
+    },
+    "1012.txt": {
+        "best_cmax": "10158"
+    },
+    "1013.txt": {
+        "best_cmax": "10163"
+    },
+    "1014.txt": {
+        "best_cmax": "10165"
+    },
+    "1015.txt": {
+        "best_cmax": "10168"
+    },
+    "1016.txt": {
+        "best_cmax": "10184"
+    },
+    "1017.txt": {
+        "best_cmax": "10161"
+    },
+    "1018.txt": {
+        "best_cmax": "10169"
+    },
+    "1019.txt": {
+        "best_cmax": "10167"
+    },
+    "1020.txt": {
+        "best_cmax": "10174"
+    },
+    "1021.txt": {
+        "best_cmax": "5040"
+    },
+    "1022.txt": {
+        "best_cmax": "5040"
+    },
+    "1023.txt": {
+        "best_cmax": "5038"
+    },
+    "1024.txt": {
+        "best_cmax": "5037"
+    },
+    "1025.txt": {
+        "best_cmax": "5039"
+    },
+    "1026.txt": {
+        "best_cmax": "5036"
+    },
+    "1027.txt": {
+        "best_cmax": "5042"
+    },
+    "1028.txt": {
+        "best_cmax": "5039"
+    },
+    "1029.txt": {
+        "best_cmax": "5036"
+    },
+    "1030.txt": {
+        "best_cmax": "5040"
+    },
+    "1031.txt": {
+        "best_cmax": "3414"
+    },
+    "1032.txt": {
+        "best_cmax": "3413"
+    },
+    "1033.txt": {
+        "best_cmax": "3412"
+    },
+    "1034.txt": {
+        "best_cmax": "3412"
+    },
+    "1035.txt": {
+        "best_cmax": "3412"
+    },
+    "1036.txt": {
+        "best_cmax": "3411"
+    },
+    "1037.txt": {
+        "best_cmax": "3411"
+    },
+    "1038.txt": {
+        "best_cmax": "3411"
+    },
+    "1039.txt": {
+        "best_cmax": "3414"
+    },
+    "1040.txt": {
+        "best_cmax": "3410"
+    },
+    "1041.txt": {
+        "best_cmax": "2518"
+    },
+    "1042.txt": {
+        "best_cmax": "2509"
+    },
+    "1043.txt": {
+        "best_cmax": "2510"
+    },
+    "1044.txt": {
+        "best_cmax": "2510"
+    },
+    "1045.txt": {
+        "best_cmax": "2507"
+    },
+    "1046.txt": {
+        "best_cmax": "2508"
+    },
+    "1047.txt": {
+        "best_cmax": "2508"
+    },
+    "1048.txt": {
+        "best_cmax": "2507"
+    },
+    "1049.txt": {
+        "best_cmax": "2511"
+    },
+    "1050.txt": {
+        "best_cmax": "2508"
+    },
+    "1051.txt": {
+        "best_cmax": "2008"
+    },
+    "1052.txt": {
+        "best_cmax": "2033"
+    },
+    "1053.txt": {
+        "best_cmax": "2010"
+    },
+    "1054.txt": {
+        "best_cmax": "2015"
+    },
+    "1055.txt": {
+        "best_cmax": "2010"
+    },
+    "1056.txt": {
+        "best_cmax": "2010"
+    },
+    "1057.txt": {
+        "best_cmax": "2027"
+    },
+    "1058.txt": {
+        "best_cmax": "2021"
+    },
+    "1059.txt": {
+        "best_cmax": "2006"
+    },
+    "1060.txt": {
+        "best_cmax": "2025"
+    },
+    "111.txt": {
+        "best_cmax": "1015"
+    },
+    "112.txt": {
+        "best_cmax": "1019"
+    },
+    "113.txt": {
+        "best_cmax": "1017"
+    },
+    "114.txt": {
+        "best_cmax": "1018"
+    },
+    "115.txt": {
+        "best_cmax": "1019"
+    },
+    "116.txt": {
+        "best_cmax": "1016"
+    },
+    "117.txt": {
+        "best_cmax": "1016"
+    },
+    "118.txt": {
+        "best_cmax": "1018"
+    },
+    "119.txt": {
+        "best_cmax": "1020"
+    },
+    "120.txt": {
+        "best_cmax": "1016"
+    },
+    "121.txt": {
+        "best_cmax": "507"
+    },
+    "122.txt": {
+        "best_cmax": "505"
+    },
+    "123.txt": {
+        "best_cmax": "506"
+    },
+    "124.txt": {
+        "best_cmax": "505"
+    },
+    "125.txt": {
+        "best_cmax": "507"
+    },
+    "126.txt": {
+        "best_cmax": "508"
+    },
+    "127.txt": {
+        "best_cmax": "506"
+    },
+    "128.txt": {
+        "best_cmax": "507"
+    },
+    "129.txt": {
+        "best_cmax": "505"
+    },
+    "130.txt": {
+        "best_cmax": "508"
+    },
+    "131.txt": {
+        "best_cmax": "400"
+    },
+    "132.txt": {
+        "best_cmax": "401"
+    },
+    "133.txt": {
+        "best_cmax": "401"
+    },
+    "134.txt": {
+        "best_cmax": "400"
+    },
+    "135.txt": {
+        "best_cmax": "400"
+    },
+    "136.txt": {
+        "best_cmax": "401"
+    },
+    "137.txt": {
+        "best_cmax": "401"
+    },
+    "138.txt": {
+        "best_cmax": "400"
+    },
+    "139.txt": {
+        "best_cmax": "401"
+    },
+    "140.txt": {
+        "best_cmax": "401"
+    },
+    "141.txt": {
+        "best_cmax": "300"
+    },
+    "142.txt": {
+        "best_cmax": "300"
+    },
+    "143.txt": {
+        "best_cmax": "300"
+    },
+    "144.txt": {
+        "best_cmax": "300"
+    },
+    "145.txt": {
+        "best_cmax": "300"
+    },
+    "146.txt": {
+        "best_cmax": "300"
+    },
+    "147.txt": {
+        "best_cmax": "300"
+    },
+    "148.txt": {
+        "best_cmax": "300"
+    },
+    "149.txt": {
+        "best_cmax": "301"
+    },
+    "150.txt": {
+        "best_cmax": "301"
+    },
+    "151.txt": {
+        "best_cmax": "201"
+    },
+    "152.txt": {
+        "best_cmax": "202"
+    },
+    "153.txt": {
+        "best_cmax": "201"
+    },
+    "154.txt": {
+        "best_cmax": "202"
+    },
+    "155.txt": {
+        "best_cmax": "202"
+    },
+    "156.txt": {
+        "best_cmax": "202"
+    },
+    "157.txt": {
+        "best_cmax": "202"
+    },
+    "158.txt": {
+        "best_cmax": "202"
+    },
+    "159.txt": {
+        "best_cmax": "202"
+    },
+    "160.txt": {
+        "best_cmax": "202"
+    },
+    "211.txt": {
+        "best_cmax": "2032"
+    },
+    "212.txt": {
+        "best_cmax": "2030"
+    },
+    "213.txt": {
+        "best_cmax": "2037"
+    },
+    "214.txt": {
+        "best_cmax": "2030"
+    },
+    "215.txt": {
+        "best_cmax": "2038"
+    },
+    "216.txt": {
+        "best_cmax": "2029"
+    },
+    "217.txt": {
+        "best_cmax": "2034"
+    },
+    "218.txt": {
+        "best_cmax": "2031"
+    },
+    "219.txt": {
+        "best_cmax": "2035"
+    },
+    "220.txt": {
+        "best_cmax": "2031"
+    },
+    "221.txt": {
+        "best_cmax": "1008"
+    },
+    "222.txt": {
+        "best_cmax": "1009"
+    },
+    "223.txt": {
+        "best_cmax": "1009"
+    },
+    "224.txt": {
+        "best_cmax": "1008"
+    },
+    "225.txt": {
+        "best_cmax": "1009"
+    },
+    "226.txt": {
+        "best_cmax": "1008"
+    },
+    "227.txt": {
+        "best_cmax": "1011"
+    },
+    "228.txt": {
+        "best_cmax": "1008"
+    },
+    "229.txt": {
+        "best_cmax": "1009"
+    },
+    "230.txt": {
+        "best_cmax": "1009"
+    },
+    "231.txt": {
+        "best_cmax": "702"
+    },
+    "232.txt": {
+        "best_cmax": "703"
+    },
+    "233.txt": {
+        "best_cmax": "702"
+    },
+    "234.txt": {
+        "best_cmax": "702"
+    },
+    "235.txt": {
+        "best_cmax": "702"
+    },
+    "236.txt": {
+        "best_cmax": "702"
+    },
+    "237.txt": {
+        "best_cmax": "702"
+    },
+    "238.txt": {
+        "best_cmax": "702"
+    },
+    "239.txt": {
+        "best_cmax": "702"
+    },
+    "240.txt": {
+        "best_cmax": "703"
+    },
+    "241.txt": {
+        "best_cmax": "503"
+    },
+    "242.txt": {
+        "best_cmax": "504"
+    },
+    "243.txt": {
+        "best_cmax": "503"
+    },
+    "244.txt": {
+        "best_cmax": "503"
+    },
+    "245.txt": {
+        "best_cmax": "503"
+    },
+    "246.txt": {
+        "best_cmax": "503"
+    },
+    "247.txt": {
+        "best_cmax": "503"
+    },
+    "248.txt": {
+        "best_cmax": "503"
+    },
+    "249.txt": {
+        "best_cmax": "503"
+    },
+    "250.txt": {
+        "best_cmax": "503"
+    },
+    "251.txt": {
+        "best_cmax": "402"
+    },
+    "252.txt": {
+        "best_cmax": "403"
+    },
+    "253.txt": {
+        "best_cmax": "403"
+    },
+    "254.txt": {
+        "best_cmax": "402"
+    },
+    "255.txt": {
+        "best_cmax": "402"
+    },
+    "256.txt": {
+        "best_cmax": "402"
+    },
+    "257.txt": {
+        "best_cmax": "402"
+    },
+    "258.txt": {
+        "best_cmax": "402"
+    },
+    "259.txt": {
+        "best_cmax": "403"
+    },
+    "260.txt": {
+        "best_cmax": "402"
+    },
+    "511.txt": {
+        "best_cmax": "5077"
+    },
+    "512.txt": {
+        "best_cmax": "5077"
+    },
+    "513.txt": {
+        "best_cmax": "5082"
+    },
+    "514.txt": {
+        "best_cmax": "5081"
+    },
+    "515.txt": {
+        "best_cmax": "5083"
+    },
+    "516.txt": {
+        "best_cmax": "5076"
+    },
+    "517.txt": {
+        "best_cmax": "5074"
+    },
+    "518.txt": {
+        "best_cmax": "5074"
+    },
+    "519.txt": {
+        "best_cmax": "5075"
+    },
+    "520.txt": {
+        "best_cmax": "5074"
+    },
+    "521.txt": {
+        "best_cmax": "2519"
+    },
+    "522.txt": {
+        "best_cmax": "2515"
+    },
+    "523.txt": {
+        "best_cmax": "2518"
+    },
+    "524.txt": {
+        "best_cmax": "2516"
+    },
+    "525.txt": {
+        "best_cmax": "2518"
+    },
+    "526.txt": {
+        "best_cmax": "2518"
+    },
+    "527.txt": {
+        "best_cmax": "2518"
+    },
+    "528.txt": {
+        "best_cmax": "2518"
+    },
+    "529.txt": {
+        "best_cmax": "2517"
+    },
+    "530.txt": {
+        "best_cmax": "2519"
+    },
+    "531.txt": {
+        "best_cmax": "1705"
+    },
+    "532.txt": {
+        "best_cmax": "1705"
+    },
+    "533.txt": {
+        "best_cmax": "1705"
+    },
+    "534.txt": {
+        "best_cmax": "1706"
+    },
+    "535.txt": {
+        "best_cmax": "1706"
+    },
+    "536.txt": {
+        "best_cmax": "1706"
+    },
+    "537.txt": {
+        "best_cmax": "1706"
+    },
+    "538.txt": {
+        "best_cmax": "1706"
+    },
+    "539.txt": {
+        "best_cmax": "1706"
+    },
+    "540.txt": {
+        "best_cmax": "1706"
+    },
+    "541.txt": {
+        "best_cmax": "1302"
+    },
+    "542.txt": {
+        "best_cmax": "1302"
+    },
+    "543.txt": {
+        "best_cmax": "1302"
+    },
+    "544.txt": {
+        "best_cmax": "1303"
+    },
+    "545.txt": {
+        "best_cmax": "1303"
+    },
+    "546.txt": {
+        "best_cmax": "1303"
+    },
+    "547.txt": {
+        "best_cmax": "1303"
+    },
+    "548.txt": {
+        "best_cmax": "1303"
+    },
+    "549.txt": {
+        "best_cmax": "1302"
+    },
+    "550.txt": {
+        "best_cmax": "1302"
+    },
+    "551.txt": {
+        "best_cmax": "1004"
+    },
+    "552.txt": {
+        "best_cmax": "1003"
+    },
+    "553.txt": {
+        "best_cmax": "1004"
+    },
+    "554.txt": {
+        "best_cmax": "1004"
+    },
+    "555.txt": {
+        "best_cmax": "1003"
+    },
+    "556.txt": {
+        "best_cmax": "1003"
+    },
+    "557.txt": {
+        "best_cmax": "1003"
+    }
+,
+    "558.txt": {
+        "best_cmax": "1004"
+    }
+,
+    "559.txt": {
+        "best_cmax": "1003"
+    }
+,
+    "560.txt": {
+        "best_cmax": "1004"
+    }
+}
