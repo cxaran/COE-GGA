@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,14 +130,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="COE-GGA.cpp" />
+    <ClCompile Include="sources\fileio.cpp" />
+    <ClCompile Include="sources\GGA\crossover.cpp" />
+    <ClCompile Include="sources\GGA\GGA.cpp" />
+    <ClCompile Include="sources\GGA\mutation.cpp" />
     <ClCompile Include="sources\heuristics.cpp" />
+    <ClCompile Include="sources\qlearning.cpp" />
+    <ClCompile Include="sources\random_utils.cpp" />
     <ClCompile Include="sources\structures.cpp" />
-    <ClCompile Include="sources\tools.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\fileio.h" />
+    <ClInclude Include="include\GGA\crossover.h" />
+    <ClInclude Include="include\GGA\GGA.h" />
+    <ClInclude Include="include\GGA\mutation.h" />
     <ClInclude Include="include\heuristics.h" />
+    <ClInclude Include="include\permutation.h" />
+    <ClInclude Include="include\qlearning.h" />
+    <ClInclude Include="include\random_utils.h" />
     <ClInclude Include="include\structures.h" />
-    <ClInclude Include="include\tools.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

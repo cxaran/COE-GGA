@@ -1,107 +1,235 @@
-// COE-GGA.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
-//
 
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <algorithm>
-
+#include "include/fileio.h"
+#include "include/GGA/GGA.h"
+#include "include/qlearning.h"
 #include "include/structures.h"
 #include "include/heuristics.h"
+#include "include/permutation.h"
 
 using namespace std;
 
-// Constantes
-const int NUM_SPECIES = 1;
-const int POPULATION_SIZE = 100;
-const int NUM_ITERATIONS = 100;
+void coevolution(Instance& instance, Chromosome& solution) {
 
-// Función para leer una instancia de un archivo
-Instance readInstanceFromFile(string fileName) {
-    Instance* instance = new Instance();
-    ifstream inputFile(fileName);
-    inputFile >> instance->numItems >> instance->numGroups >> instance->capacity >> instance->knowBest;
-    // Leer los pesos de cada elemento
-    double weight;
-    for (int i = 0; i < instance->numItems; i++) {
-        Item* item = new Item();
-        item->id = i;
-        for (int j = 0; j < instance->numGroups; j++) {
-            inputFile >> weight;
-            item->weights.push_back(weight);
+
+    // Se carga la configuracion
+    ConfigurationCOE* config = &instance.config;
+
+    // Inicializar la población
+    Population population;
+    initializePopulation(instance, population, config->populationSize, true);
+
+    // Inicializar la poblacion de hijos
+    Population children;
+    initializePopulation(instance, children, config->populationSize, false);
+
+    // Permutacion aleatoria de la población
+    Permutation order(population.size);
+
+    // Determinar el estado actual y la accion A1
+    State currentState;
+    Action action = A1;
+
+    // Crear un vector para almacenar las especies
+    Species species[TOTALSPECIES];
+
+    // Crear 4 instancias de la estructura Species, asignándoles el tamaño 
+    int chromosomeIndex = 0;
+    for (int i = 0; i < TOTALSPECIES; ++i) {
+        Species newSpecie;
+        newSpecie.size = 1.0 / TOTALSPECIES;
+
+        // Asignar cromosomas a la especie
+        for (int j = 0; j < config->populationSize * newSpecie.size; j++) {
+            newSpecie.population.chromosomes[j] = population.chromosomes[chromosomeIndex++];
+            newSpecie.population.size++;
         }
-        // Calcular el peso mínimo y agregar el elemento a la instancia
-        item->min = *min_element(item->weights.begin(), item->weights.end());
-        instance->items.push_back(item);
-    }
-    // Cerrar el archivo
-    inputFile.close();
-    return *instance;
-}
 
-// Función para inicializar la población, regresa la poblacion ordenada
-vector<Chromosome> initializePopulation(Instance& instance, int SIZE) {
-    vector<Chromosome> population;
-    vector<Item*> items = instance.items;
-    // Ordenar los elementos por peso mínimo
-    sort(items.begin(), items.end(), compareMin);
-    // Generar cromosomas hasta que se alcance el tamaño de población deseado
-    int method = 0;
-    while (population.size() < SIZE) {
-        Chromosome* chromosome = new Chromosome();
-        chromosome->problem = &instance;
-        if (method == 0) firstFit(*chromosome, instance.items);
-        if(method == 1)bestFit(*chromosome, items);
-        // Verificar que todos los elementos estén incluidos en el cromosoma
-        if (allItemsIncluded(*chromosome)) {
-            // Calcular el fitness del cromosoma
-            calculateFitness(*chromosome);
-            // Agregar el cromosoma a la población
-            chromosome->age = 0;
-            population.push_back(*chromosome);
+        // Calcular el fitness de la especie
+        calculateSpeciesFitness(newSpecie);
+
+        // Añadir las especies al vector
+        species[i] = newSpecie;
+
+        // Acualizar el estado acual
+        if (species[currentState.speciesIndex].fitness > species[i].fitness) {
+            currentState.speciesIndex = i;
         }
-        method++;
-        if (method > 1) {
-            // Mezclar los elementos de forma aleatoria
-            random_shuffle(items.begin(), items.end());
-            method = 0;
+
+    }
+
+    // Arreglo de dos ConfigurationGGA con valores por defecto, para la especie 1 y 2
+    ConfigurationGGA configsGGA[4];
+    // Cambiar el valor de "elitism" de la especie 2
+    configsGGA[1].elitism = 0.9;
+
+    // Especie dominante (de mayor fitness) en la iteración actual
+    int dominantSpeciesIndex = currentState.speciesIndex;
+    // Guarda la especie dominante en cada iteracion
+    int sumStates[TOTALSPECIES] = { 0 };
+
+    // Repetir el número especificado de iteraciones
+    for (int iteration = 1; iteration <= config->iterations; ++iteration) {
+        
+        // ************************ Especie 1 ************************
+        // Aplicar GGA 
+        GGA(&configsGGA[0], species[0],children, iteration);
+
+        // ************************ Especie 2 ************************
+        // Aplicar GGA 
+        GGA(&configsGGA[1], species[1], children, iteration);
+
+        // ************************ Especie 3 ************************
+        // Aplicar GGA 
+        GGA(&configsGGA[2], species[2], children, iteration);
+
+        // ************************ Especie 4 ************************
+        // Aplicar GGA 
+        GGA(&configsGGA[3], species[3], children, iteration);
+
+
+        // Calcular el fitness de cada especie
+        for (int i = 0; i < TOTALSPECIES; ++i) {
+            calculateSpeciesFitness(species[i]);
         }
+
+        // Calcular la especie dominante
+        for (int i = 0; i < TOTALSPECIES; ++i) {
+            if (species[i].fitness > species[dominantSpeciesIndex].fitness) {
+                dominantSpeciesIndex = i;
+            }
+        }
+
+        // Aumentar sumStates en la posicion de la especie dominate
+        sumStates[dominantSpeciesIndex]++;
+
+        if (iteration % config->learningWindow == 0) {
+
+            // Calcular el estado siguiernte
+            State nextState;
+            for (int i = 0; i < TOTALSPECIES; ++i) {
+                if (sumStates[nextState.speciesIndex] < sumStates[i]) {
+                    nextState.speciesIndex = i;
+                }
+                cout << sumStates[i] << " ";
+                // Poner todas las posiciones de sumStates en 0
+                sumStates[i] = 0;
+            }
+            cout << endl;
+
+            // Calcular la recompensa
+            float reward = nextState.speciesIndex == currentState.speciesIndex ? rewards[0] : rewards[1];
+
+            // Actualizar la tabla Q
+            updateQTable(currentState, nextState, action, reward);
+
+            // Actualizar el estado acual como el estado siguiente
+            currentState = nextState;
+
+            // Seleccionar una acción utilizando la política 𝜀-greedy
+            action = chooseAction(currentState);
+            cout << action << endl;
+
+            // Aplicar la acción
+            // Si la acción es A2, se disminuye el tamaño de las especies no dominantes y se aumenta el tamaño de la especie dominante
+            if (action == A2) {
+                // Variable que almacena la cantidad de especies que se pueden reducir
+                int speciesRate = TOTALSPECIES - 1;
+                // Tamaño que se va a aumentar en la especie dominante
+                float newSize = config->speciesShrinkRate * speciesRate;
+                // Si el tamaño de la especie dominante no sobrrepasa la unidad
+                if (species[currentState.speciesIndex].size + newSize <= 1) {
+                    // Reducir tamaño de las especies no dominantes
+                    for (int i = 0; i < TOTALSPECIES; ++i) {
+                        // Si la especie no es dominante
+                        if (i != currentState.speciesIndex) {
+                            // Si el tamaño de la especie no dominante se puede reducir sin llegar a ser negativo
+                            if (species[i].size >= newSize / speciesRate) {
+                                species[i].size -= newSize / speciesRate;
+                            }
+                            // Si la especie no dominante no se puede reducir, se reduce la cantidad de especies que se pueden reducir
+                            else {
+                                speciesRate--;
+                            }
+                        }
+                    }
+                    // Si las especies no dominantes se redujeron, se aumenta el tamaño de la especie dominante
+                    if (speciesRate > 0) {
+                        species[currentState.speciesIndex].size += newSize;
+                    }
+                }
+            }
+
+            if (config->verbose) {
+                cout << iteration << " ";
+                for (int i = 0; i < TOTALSPECIES; ++i) {
+                    cout << species[i].size << " ";
+                }
+                cout << endl;
+            }
+
+        }
+
+        // Ordenar aletoriamente la poblacion
+        order.randomize(&config->seed, 0, config->populationSize);
+        // Dividir aletoriamente la poblacion global en las especies
+        int chromosomeIndex = 0;
+        for (int i = 0; i < TOTALSPECIES; ++i) {
+            species[i].population.size = 0;
+            // Asignar cromosomas a la especie en proporción a su tamaño
+            for (int j = 0; j < config->populationSize * species[i].size && chromosomeIndex < config->populationSize; j++) {
+                species[i].population.chromosomes[j] = population.chromosomes[order[chromosomeIndex++]];
+                species[i].population.size++;
+            }
+
+        }
+
+        // Ordena los individuos de la población en orden ascendente de su fitness
+        sortChromosomesByFitness(population);
+
     }
-    sort(population.begin(), population.end(), compareFitness);
-    return population;
-}
 
-Chromosome coevolution(Instance& instance) {
-
-    // Species
-    vector<Specie> species;
-    for (int i = 0; i < NUM_SPECIES; i++){
-        Specie specie;
-        specie.id = i;
-        specie.size = POPULATION_SIZE / NUM_SPECIES;
-        specie.members = initializePopulation(instance, specie.size);
-        species.push_back(specie);
-    }
-
-    // Repitir ara el número especificado de iteraciones
-    for (int generation = 1; generation <= NUM_ITERATIONS; ++generation) {
-        //cout << generation << " " << species[0].members[0].groups.size() << endl;
-        geneticAlgorithm(species[0], generation, 0.1, 0.22, 0.82);
-        if (species[0].members[0].groups.size() <= instance.knowBest) break;
-    }
-
-    // Verificar la solucion
-    sort(species[0].members.begin(), species[0].members.end(), compareFitness);
-    if (allItemsIncluded(species[0].members[0]))
-        return species[0].members[0];
-    else exit(3);
-    return Chromosome();
+    // Regresa la mejor solucion
+    solution = population.bestChromosome;
+    return;
+    
 }
 
 int main(int argc, char* argv[]) {
-    Instance instance = readInstanceFromFile(argv[1]);
-    Chromosome solution = coevolution(instance);
-    printChromosomeAsJson(solution, true);
+    // argv[1]: Archivo de instancia.
+    // argv[2]: Archivo de configuracion (opcional).
+
+    // Lee una instancia del problema desde el archivo.
+    Instance instance = readInstanceFile(argv[1]);
+
+    // Luego, se crea una configuración inicial que se modificara si se proporciona un archivo de configuración adicional.
+    if (argc > 2) {
+        // Revisar debug_configuration.txt
+        readConfigurationFile(argv[2], instance.config);
+    }
+
+    // Calcular el limite inferior de la instancia para BPP.
+    lowerBound(instance);
+
+    // Inicio de la medición de tiempo
+    auto start = clock();
+    // A continuación, se llama al genetico pasando la instancia y la configuración.
+    Chromosome solution;
+    coevolution(instance, solution);
+    solution.time = (clock() - start) / (CLK_TCK * 1.0);
+
+    // Verificamos la solución
+    //if (!allItemsIncluded(solution)) exit(3);
+
+    // La solución devuelta se imprime en formato JSON en la consola.
+    if (instance.config.verbose) {
+        cout << "Iteration: " << solution.iteration << endl;
+        cout << "Solution: " << solution.totalGroups << endl;
+        printChromosomeAsJson(solution, true);
+    }
+    else {
+        //printChromosomeAsJson(solution, true);
+    }
+
     return 0;
 }
 

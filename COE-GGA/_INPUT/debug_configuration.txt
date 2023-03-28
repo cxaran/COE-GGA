@@ -1,0 +1,7 @@
+populationSize = 100
+iterations = 500
+learningWindow = 10
+elitism = 0.1
+speciesShrinkRate = 0.01
+seed = 1
+verbose = 1

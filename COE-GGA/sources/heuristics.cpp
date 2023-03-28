@@ -1,252 +1,195 @@
-#include "../heuristics.h"
+#include "../include/heuristics.h"
 
-//"firstFit" es una función que asigna elementos a grupos en un cromosoma.
-//La función recibe un cromosoma y un vector de elementos.Cada elemento se 
-//agrega al primer grupo en el que su volumen y el volumen del grupo sea 
-//menor o igual a la capacidad máxima permitida.Si ningún grupo cumple con 
-//esta condición, se crea un nuevo grupo con el elemento.
-void firstFit(Chromosome& chromosome, const vector<Item*>& items) {
-    //Itera sobre cada elemento en "items"
-    for (Item* item : items) {
-        //Marca si el elemento ha sido añadido a un grupo
-        bool added = false;
-        //Itera sobre cada grupo en "chromosome.groups"
-        for (int i = 0; i < chromosome.groups.size(); ++i) {
-            // Verificamos el id del grupo
-            if (chromosome.groups[i].id != i) {
-                chromosome.groups[i].id = i;
-                refactorGroupVolume(chromosome.groups[i]);
-            }
-            //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
-            if (chromosome.groups[i].volume + item->weights[chromosome.groups[i].id] <= chromosome.problem->capacity) {
-                //Marca si el elemento ha sido añadido a un grupo
-                added = addItemToGroup(chromosome.groups[i], *item);
-                //Detiene la iteración sobre los grupos
-                break;
-            }
-        }
-        //Si el elemento no ha sido añadido a ningún grupo
-        if (!added) {
-            //Crea un nuevo grupo con el elemento
-            createNewGroupWithItem(chromosome, *item);
-        }
-    }
-    // Comprueba el orden de los contenedores
-    if (!is_sorted(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups))
-        sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
-}
+// Funcion que calcula el limite L2
+void lowerBound(Instance& instance) {
+    long int k, m, i, j, aux1, aux2;
+    long double sjx = 0, sj2 = 0, sj3 = 0;
+    long int jx = 0, cj12, jp = 0, jpp = 0, cj2;
 
-//"bestFit" es una función que también asigna elementos a grupos en un 
-//cromosoma.Sin embargo, en lugar de agregar el elemento al primer 
-//grupo que cumpla con la condición de capacidad, busca el grupo con 
-//la mejor capacidad restante y agrega el elemento allí.Si ningún 
-//grupo tiene capacidad suficiente, se crea un nuevo grupo.
-void bestFit(Chromosome& chromosome, const vector<Item*>& items) {
-    //Itera sobre cada elemento en "items"
-    for (Item* item : items) {
-        //Inicializa el ID del grupo con el mejor ajuste como -1 (no se ha encontrado ningún grupo)
-        int bestGroupId = -1;
-        //Inicializa el mejor ajuste como 0
-        int bestFit = 0;
-        //Itera sobre cada grupo en "chromosome.groups"
-        for (int i = 0; i < chromosome.groups.size(); ++i) {
-            //Calcula el espacio libre en el grupo actual
-            int freeSpace = chromosome.problem->capacity - chromosome.groups[i].volume;
-            //Si el peso del elemento es menor o igual al espacio libre y el espacio libre es mejor que el mejor ajuste actual
-            if (item->weights[chromosome.groups[i].id] <= freeSpace && freeSpace > bestFit) {
-                //Actualiza el mejor ajuste
-                bestFit = freeSpace;
-                //Actualiza el ID del grupo con el mejor ajuste
-                bestGroupId = i;
-            }
-        }
-        //Si se encontró un grupo con un mejor ajuste
-        if (bestGroupId != -1) {
-            //Añade el elemento al grupo con el mejor ajuste
-            if (!addItemToGroup(chromosome.groups[bestGroupId], *item)) exit(3);
-        }
-        //Si no se encontró un grupo con un mejor ajuste
-        else {
-            //Crea un nuevo grupo con el elemento
-            if (!createNewGroupWithItem(chromosome, *item)) exit(3);
-        }
-    }
-    // Comprueba el orden de los contenedores
-    if (!is_sorted(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups))
-        sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
-}
-
-// Función que realiza el "firstFit" con reacomodo
-void firstFitR(Chromosome& chromosome,const vector<Item*>& itemsConst) {
-    vector<Item*> items;
-    items.insert(items.end(), itemsConst.begin(), itemsConst.end());
-    //Itera sobre cada elemento en "items"
-    for (int t = 0; t < items.size(); ++t) {
-        //Marca si el elemento ha sido añadido a un grupo
-        bool added = false;
-        //Itera sobre cada grupo en "chromosome.groups"
-        for (int i = 0; i < chromosome.groups.size(); ++i) {
-            // Verificamos el id del grupo
-            if (chromosome.groups[i].id != i) {
-                chromosome.groups[i].id = i;
-                refactorGroupVolume(chromosome.groups[i]);
-            }
-            //Si el volumen del grupo más el peso del elemento es menor o igual a la capacidad del problema
-            if (chromosome.groups[i].volume + items[t]->weights[chromosome.groups[i].id] <= chromosome.problem->capacity) {
-                //Marca si el elemento ha sido añadido a un grupo
-                added = addItemToGroup(chromosome.groups[i], *items[t]);
-                //Detiene la iteración sobre los grupos
-                break;
-            }
-            //Si el elemento puede ser intercambiado por un elemento del grupo
-            for (int j = 0; j < chromosome.groups[i].items.size() && !added; ++j) {
-                double newVolume = chromosome.groups[i].volume
-                    + items[t]->weights[chromosome.groups[i].id]
-                    - chromosome.groups[i].items[j]->weights[chromosome.groups[i].id];
-                if (newVolume <= chromosome.problem->capacity && newVolume > chromosome.groups[i].volume) {
-                    Item* aux = items[t];
-                    items[t] = chromosome.groups[i].items[j];
-                    chromosome.groups[i].items[j] = aux;
-                    refactorGroupVolume(chromosome.groups[i]);
-                    break;
-                }
-            }
-        }
-        //Si el elemento no ha sido añadido a ningún grupo
-        if (!added) {
-            //Crea un nuevo grupo con el elemento
-            createNewGroupWithItem(chromosome, *items[t]);
-        }
-    }
-    // Comprueba el orden de los contenedores
-    if (!is_sorted(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups))
-        sort(chromosome.groups.begin(), chromosome.groups.end(), compareVolumeGroups);
-}
-
-// Función de selección controlada
-int controlledSelection(int chromosomesSize, float size, bool start) {
-    int numIndividuos = chromosomesSize * size;
-    if (numIndividuos < 1) return start ? 0 : chromosomesSize - 1;
-    int startIndex = start ? 0 : chromosomesSize - numIndividuos;
-    int randomIndex = rand() % numIndividuos + startIndex;
-    return randomIndex;
-}
-
-// Función de cruza controlada
-Chromosome* controlledCrossover(const Chromosome& a, const Chromosome& b) {
-    Chromosome* child = new Chromosome();
-    child->problem = a.problem;
-    // Remove groups with repeated items
-    vector<int> items(child->problem->numItems, 0);
-    for (int i = 0; i < a.problem->numGroups; i++) {
-        if (i < a.groups.size()) {
-            bool repeatedA = false;
-            for (int j = 0; j < a.groups[i].items.size(); j++) {
-                items[a.groups[i].items[j]->id]++;
-                if (items[a.groups[i].items[j]->id] > 1) {
-                    for (j; j >= 0; j--) items[a.groups[i].items[j]->id]--;
-                    repeatedA = true;
-                    break;
-                }
-            }
-            if (!repeatedA) child->groups.push_back(a.groups[i]);
-        }
-        if (i < b.groups.size()) {
-            bool repeatedB = false;
-            for (int j = 0; j < b.groups[i].items.size(); j++) {
-                items[b.groups[i].items[j]->id]++;
-                if (items[b.groups[i].items[j]->id] > 1) {
-                    for (j; j >= 0; j--) items[b.groups[i].items[j]->id]--;
-                    repeatedB = true;
-                    break;
-                }
-            }
-            if (!repeatedB) child->groups.push_back(b.groups[i]);
-        }
-
-    }
-    // Create new groups with missing items
-    vector<Item*> unassignedItems;
-    for (Item* item : a.problem->items)
-        if (items[item->id] == 0) unassignedItems.push_back(item);
-    firstFitR(*child, unassignedItems);
-    calculateFitness(*child);
-    unassignedItems.clear();
-    return child;
-}
-
-// Función de muta controlada
-void controlledMutation(Chromosome& chromosome, int k) {
-    // Seleccione un grupo aleatorio para ser eliminado.
-    if (chromosome.groups.size() > 0) {
-        int deletionRate = ceil(sqrt(chromosome.groups.size()));
-        vector<Item*> removedItems;
-        // Eliminar los grupos del cromosoma.
-        for (int i = chromosome.groups.size() - 1; i > chromosome.groups.size() - deletionRate; i--) {
-            removedItems.insert(removedItems.end(), chromosome.groups[i].items.begin(), chromosome.groups[i].items.end());
-            chromosome.groups.erase(chromosome.groups.begin() + i);
-        }
-        // Reacomodo de los elementos eliminados.
-        firstFit(chromosome, removedItems);
-    }
-}
-
-// Función que resuelve el problema mediante una estrategia genética
-void geneticAlgorithm(Specie& specie, int GENERATION, float ELITE_SIZE, float CROSSOVER_RATE, float MUTATION_RATE) {
+    jx = instance.n_;
     
-    // Ordenamiento de las soluciones
-    if (!is_sorted(specie.members.begin(), specie.members.end(), compareFitness))
-        sort(specie.members.begin(), specie.members.end(), compareFitness);
-
-    // CRUZA
-    // Seleccionamos los mejores individuos como padres élite para la cruza
-    vector<int> parents_e;
-    while (parents_e.size() < specie.members.size() * CROSSOVER_RATE)
-        parents_e.push_back(controlledSelection(specie.members.size(), ELITE_SIZE, true));
-    // Seleccionamos los peores individuos como padres promedio para la cruza
-    vector<int> parents_p;
-    while (parents_p.size() < parents_e.size())
-        parents_p.push_back(controlledSelection(specie.members.size(), 1 - ELITE_SIZE, false));
-    // Realizamos la Cruza
-    vector<Chromosome*> children;
-    for (int i = 0; i < parents_p.size(); i++) {
-        children.push_back(controlledCrossover(specie.members[parents_e[i]], specie.members[parents_p[i]]));
-        children.back()->age = GENERATION;
+    if (jx == instance.numItems) {
+        instance.lowerBound = jx;
+        return;
     }
-    //Inserción por remplazo controlado
-    for (int parent : parents_p) {// Replazamos a los padres promedio
-        if (specie.members[parent].age < GENERATION && !children.empty()) {
-            specie.members.erase(specie.members.begin() + parent);
-            specie.members.push_back(*children.back());
-            delete children.back();
-            children.pop_back();
+    if (jx == 0){
+        if (fmod(instance.totalWeight, instance.capacity) >= 1)
+            instance.lowerBound = (long int)ceil(instance.totalWeight / instance.capacity);
+        else
+            instance.lowerBound = (long int)(instance.totalWeight / instance.capacity);
+        return;
+    }
+    else{
+        cj12 = jx;
+        for (i = jx; i < instance.numItems; i++)
+            sjx += instance.items[i]->weight;
+        jp = jx;
+        for (i = 0; i < jx; i++){
+            if (instance.items[i]->weight <= instance.capacity - instance.items[jx]->weight){
+                jp = i;
+                break;
+            }
+        }
+
+        cj2 = jx - jp;
+        for (i = jp; i <= jx - 1; i++)
+            sj2 += instance.items[i]->weight;
+        jpp = jx;
+        sj3 = instance.items[jpp]->weight;
+
+        instance.items[instance.numItems] = new Item{ instance.numItems ,0 };
+        
+        while (instance.items[jpp + 1]->weight == instance.items[jpp]->weight){
+            jpp++;
+            sj3 += instance.items[jpp]->weight;
+        }
+        instance.lowerBound = cj12;
+
+        do{
+            if (fmod((sj3 + sj2), instance.capacity) >= 1)
+                aux1 = (long int)ceil((sj3 + sj2) / instance.capacity - cj2);
+            else
+                aux1 = (long int)((sj3 + sj2) / instance.capacity - cj2);
+
+            if (instance.lowerBound < (cj12 + aux1))
+                instance.lowerBound = cj12 + aux1;
+            jpp++;
+            if (jpp < instance.numItems){
+                sj3 += instance.items[jpp]->weight;
+                while (instance.items[jpp + 1]->weight == instance.items[jpp]->weight){
+                    jpp++;
+                    sj3 += instance.items[jpp]->weight;
+                }
+                while (jp > 0 && instance.items[jp - 1]->weight <= instance.capacity - instance.items[jpp]->weight){
+                    jp--;
+                    cj2++;
+                    sj2 += instance.items[jp]->weight;
+                }
+
+            }
+            if (fmod((sjx + sj2), instance.capacity) >= 1)
+                aux2 = (long int)ceil((sjx + sj2) / instance.capacity - cj2);
+            else
+                aux2 = (long int)((sjx + sj2) / instance.capacity - cj2);
+        } while (jpp <= instance.capacity || (cj12 + aux2) > instance.lowerBound);
+    }
+
+}
+
+// Función que realiza el First Fit para agregar un artículo al cromosoma.
+void firstFit(Chromosome& chromosome, int itemPos, int& startGroup, bool isLast) {
+    long int i;
+    Item* item = getItem(chromosome, itemPos);
+
+    // Si el artículo actual supera la capacidad del grupo más vacío, se crea un nuevo grupo.
+    if (!isLast && item->weight > (chromosome.problem->capacity - chromosome.maxEmptyVolume)) {
+        i = chromosome.totalGroups;
+    }
+    else {
+        // En caso contrario, se itera por los grupos existentes buscando un grupo con capacidad suficiente para el artículo.
+        for (i = startGroup; i < chromosome.totalGroups; i++) {
+            if (chromosome.getGroupVolume(i) + item->weight <= chromosome.problem->capacity) {
+                // Si se encuentra un grupo, se agrega el artículo y se actualizan los atributos del cromosoma.
+                addItemToGroup(*chromosome.groups[i], *item);
+                if (chromosome.getGroupVolume(i) > chromosome.maxSpan) {
+                    chromosome.maxSpan = chromosome.getGroupVolume(i);
+                }
+                if (isLast){
+                    for (i; i < chromosome.totalGroups; i++) {
+                        chromosome.fitness += pow(((double)chromosome.getGroupVolume(i) / chromosome.problem->capacity), 2);
+                    }
+                    return;
+                }
+                // Se actualiza el ultimo contenedor con capacidad disponible para objetos.
+                if (chromosome.getGroupVolume(i) + chromosome.problem->minWeight > chromosome.problem->capacity && i == startGroup){
+                    startGroup++;
+                    chromosome.fitness += pow(((double)chromosome.getGroupVolume(i) / chromosome.problem->capacity), 2);
+                }
+                return;
+            }
+            if (isLast) {
+                chromosome.fitness += pow(((double)chromosome.getGroupVolume(i) / chromosome.problem->capacity), 2);
+            }
         }
     }
-    for (int i = specie.members.size() - 1; !children.empty() && i > specie.members.size() * ELITE_SIZE; i--) {
-        if (specie.members[i].age < GENERATION) {// Remplazamos a los elemtos de generaciones pasadas
-            specie.members.erase(specie.members.begin() + i);
-            i--;
-            specie.members.push_back(*children.back());
-            delete children.back();
-            children.pop_back();
+    // Si no se encuentra un grupo con suficiente capacidad, se crea un nuevo grupo y se actualizan los atributos del cromosoma.
+    createNewGroupWithItem(chromosome, *item);
+    if (chromosome.getGroupVolume(i) < chromosome.maxEmptyVolume) {
+        chromosome.maxEmptyVolume = chromosome.getGroupVolume(i);
+    }
+    if (isLast) {
+        chromosome.fitness += pow(((double)chromosome.getGroupVolume(i) / chromosome.problem->capacity), 2);
+    }
+}
+
+//  Función que realiza el "firstFit" sin los ñ objetos grandes.
+void firstFitN_(Chromosome& chromosome) {
+    int i, j, startGroup = 0;
+    // Se incializa el volumen del grupo más vacío.
+    chromosome.maxEmptyVolume = chromosome.problem->capacity;
+    // Si el cromosoma contiene objetos grandes, se agregan en grupos separados.
+    if (chromosome.problem->n_ > 0){
+        for (i = 0; i < chromosome.problem->n_; i++) {
+            createNewGroupWithItem(chromosome,*getItem(chromosome, i));
+            if (chromosome.getGroupVolume(i) < chromosome.maxEmptyVolume) {
+                chromosome.maxEmptyVolume = chromosome.getGroupVolume(i);
+            }
         }
+        // Se ordena aleatoriamente el vector permutation sin tomar los n objetos grandes.
+        shufflePermutationN_(*chromosome.problem);
+        // Se aplica el algoritmo First Fit a los elementos restantes del vector permutation.
+        for (j = chromosome.problem->n_; j < chromosome.problem->numItems - 1; j++) {
+            firstFit(chromosome, chromosome.problem->permutation[j], startGroup, false);
+        }
+        firstFit(chromosome, chromosome.problem->permutation[j], startGroup, true);
     }
-    while (!children.empty()) {
-        delete children.back();
-        children.pop_back();
+    else{
+        // Si el cromosoma no contiene objetos grandes, se ordena aleatoriamente el vector permutation completo.
+        shufflePermutationN_(*chromosome.problem);
+        // Se aplica el algoritmo First Fit a los elementos del vector permutation.
+        for (j = 0; j < chromosome.problem->numItems - 1; j++) {
+            firstFit(chromosome, chromosome.problem->permutation[j], startGroup, false);
+        }
+        firstFit(chromosome, chromosome.problem->permutation[j], startGroup, true);
     }
+}
 
-    // Ordenamiento de las soluciones
-    if (!is_sorted(specie.members.begin(), specie.members.end(), compareFitness))
-        sort(specie.members.begin(), specie.members.end(), compareFitness);
+// Función para inicializar la población, regresa la poblacion ordenada
+void initializePopulation(Instance& instance, Population& population, int populationSize, bool applyFirstFit) {
+    for (int i = 0; i < populationSize; i++) {
+        // Creamos el cromosoma
+        Chromosome* chromosome = new Chromosome();
+        chromosome->problem = &instance;
 
-    // MUTA
-    // Seleccionamos individuos a mutar
-    vector<int> individualsToMutate;
-    while (individualsToMutate.size() < specie.members.size() * MUTATION_RATE)
-        individualsToMutate.push_back(controlledSelection(specie.members.size(), 1 - ELITE_SIZE, false));
-    for (int i = 0; i < individualsToMutate.size(); i++) {
-        controlledMutation(specie.members[individualsToMutate[i]], 1.3);
-        specie.members[individualsToMutate[i]].age = GENERATION;
+        // Si se aplica firstFit
+        if (applyFirstFit) {
+            // Llama a la función FF-ñ
+            firstFitN_(*chromosome);
+            // Calcular el fitness del cromosoma
+            chromosome->fitness /= chromosome->totalGroups;
+            chromosome->iteration = 0;
+        }
+
+        addChromosomeToPopulation(population, *chromosome);
+    }
+}
+
+// Función para inicializar la población, regresa la poblacion ordenada
+void initializePopulation(Instance& instance, Population& population, int populationSize, bool applyFirstFit) {
+    for (int i = 0; i < populationSize; i++) {
+        // Creamos el cromosoma
+        Chromosome* chromosome = new Chromosome();
+        chromosome->problem = &instance;
+
+        // Si se aplica firstFit
+        if (applyFirstFit) {
+            // Llama a la función FF-ñ
+            firstFitN_(*chromosome);
+            // Calcular el fitness del cromosoma
+            chromosome->fitness /= chromosome->totalGroups;
+            chromosome->iteration = 0;
+        }
+
+        addChromosomeToPopulation(population, *chromosome);
     }
 }
