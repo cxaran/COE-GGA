@@ -455,8 +455,19 @@ bool twoRoutineHelper(Chromosome& chromosome,Group& machine,int num_trabajos,int
 	}
 	else {
 		int size_items = machine.items.size();
-		//cout << size_items <<"-";
 		double porcentaje_par = 19;
+		//cout << size_items <<"-";
+		if (size_items <= 50) {
+			porcentaje_par = 19;
+		}
+		else if (size_items <= 400) {
+			porcentaje_par = 200;
+		}
+		else if (size_items <= 1000) {
+			porcentaje_par = 500;
+		}
+		else { porcentaje_par = 800; }
+
 		double p_par = porcentaje_par + size_items;
 		//cout << "s" << p_par << "s";
 		double formula = porcentaje_par / p_par;
