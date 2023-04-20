@@ -1,6 +1,6 @@
 #include "../include/fileio.h"
 
-// Lee el archivo de configuración y devuelve una estructura Configuration con los valores correspondientes
+// Lee el archivo de configuraciï¿½n y devuelve una estructura Configuration con los valores correspondientes
 void readConfigurationFile(string fileName, ConfigurationCOE& config) {
 
     ifstream configFile(fileName);
@@ -12,7 +12,7 @@ void readConfigurationFile(string fileName, ConfigurationCOE& config) {
 
     string paramName, _, paramValue;
 
-    // Lee cada parámetro del archivo y lo asigna a la estructura Configuration
+    // Lee cada parï¿½metro del archivo y lo asigna a la estructura Configuration
     while (configFile >> paramName >> _ >> paramValue) {
         if (paramName == "populationSize") {
             config.populationSize = stoi(paramValue);
@@ -58,7 +58,7 @@ Instance readInstanceFile(string fileName) {
     double capacity;
     instanceFile >> instance.numItems >> instance.numGroups >> capacity >> instance.knowBest;
 
-    // Lee el peso de cada artículo y lo agrega a un nuevo objeto Item en el vector items de la instancia
+    // Lee el peso de cada artï¿½culo y lo agrega a un nuevo objeto Item en el vector items de la instancia
     float weight[MAXITEMS];
     for (int i = 0; i < instance.numItems; i++) {
         Item* newItem = new Item{(unsigned int)i};
@@ -69,7 +69,7 @@ Instance readInstanceFile(string fileName) {
             instanceFile >> weight[k];
             weight[k] *= instance.weightFactor;
 
-            // Verificación si los pesos son enteros o flotantes, weightFactor ayuda a evitar errores por pérdida de precisión" o "truncamiento"
+            // Verificaciï¿½n si los pesos son enteros o flotantes, weightFactor ayuda a evitar errores por pï¿½rdida de precisiï¿½n" o "truncamiento"
             while (weight[k] != floor(weight[k])) {
                 weight[k] *= 10;
                 newItem->weight *= 10;
@@ -102,7 +102,7 @@ Instance readInstanceFile(string fileName) {
     sortItemsByWeight(instance);
     instance.minWeight = instance.items[instance.numItems - 1]->weight;
 
-    // Encontramos los ñ objetos grandes
+    // Encontramos los ï¿½ objetos grandes
     while (instance.items[instance.n_]->weight > instance.capacity / 2 && instance.n_ < instance.numItems) instance.n_++;
 
     // Determinar el tipo de problema
@@ -111,7 +111,7 @@ Instance readInstanceFile(string fileName) {
     return instance;
 }
 
-// Función para imprimir la información de un cromosoma en formato JSON.
+// Funciï¿½n para imprimir la informaciï¿½n de un cromosoma en formato JSON.
 void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups) {
     cout << "{" << endl;
     cout << "  \"fitness\": {" << endl;

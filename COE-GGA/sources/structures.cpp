@@ -1,6 +1,6 @@
 #include "../include/structures.h"
 
-// Función para ordenar los airticulos de una instancia.
+// Funciï¿½n para ordenar los airticulos de una instancia.
 void sortItemsByWeight(Instance& instance) {
     long int m, k, ban = 1;
 
@@ -23,25 +23,25 @@ void sortItemsByWeight(Instance& instance) {
     }
 }
 
-//  Función que vacía los items guardados en un grupo
+//  Funciï¿½n que vacï¿½a los items guardados en un grupo
 void clearGroup(Group& group) {
     group.volume = 0;
     group.totalItems = 0;
 }
 
-// Función obtiene el articulo en la posición indicada segun su peso.
+// Funciï¿½n obtiene el articulo en la posiciï¿½n indicada segun su peso.
 Item* getItem(const Chromosome& chromosome, int itemPos) {
     return chromosome.problem->items[itemPos];
 }
 
-// Función para agregar un articulo a un grupo.
+// Funciï¿½n para agregar un articulo a un grupo.
 void addItemToGroup(Group& group, Item& item) {
     // Aumentar el volumen del grupo y agregar el objeto.
     group.volume += item.weights[group.id];
     group.items[group.totalItems++] = &item;
 }
 
-// Función para crear un nuevo grupo y agregar un objeto a él
+// Funciï¿½n para crear un nuevo grupo y agregar un objeto a ï¿½l
 void createNewGroupWithItem(Chromosome& chromosome, Item& item) {
     Group* group;
     // Si el grupo existe se limpia
@@ -67,7 +67,7 @@ void createNewGroupWithItem(Chromosome& chromosome, Item& item) {
 
 }
 
-// Función para ordenar aleatoriamente el vector permutation sin tomar los ñ objetos grandes.
+// Funciï¿½n para ordenar aleatoriamente el vector permutation sin tomar los ï¿½ objetos grandes.
 void shufflePermutationN_(Instance& instance) {
     // Si permutation esta vacio se inicializa
     if (instance.permutation.size == 0) {
@@ -79,13 +79,13 @@ void shufflePermutationN_(Instance& instance) {
     }
 }
 
-// Elimina un item de un grupo dado su posición en el grupo
+// Elimina un item de un grupo dado su posiciï¿½n en el grupo
 void removeItemFromGroup(Group& group, int itemPos) {
    group.totalItems--;
    group.items[itemPos] = group.items[group.totalItems];
 }
 
-// Función para comparar dos cromosomas según su fitness.
+// Funciï¿½n para comparar dos cromosomas segï¿½n su fitness.
 bool compareFitness(const Chromosome& a, const Chromosome& b) {
     if (a.problem->problemType == 1) {
         return a.maxSpan < b.maxSpan;
@@ -96,7 +96,7 @@ bool compareFitness(const Chromosome& a, const Chromosome& b) {
     }
 }
 
-// Función para verificar dos cromosomas comparten fitness.
+// Funciï¿½n para verificar dos cromosomas comparten fitness.
 bool compareEqualFitness(const Chromosome& a, const Chromosome& b) {
     if (a.problem->problemType == 1) {
         return a.maxSpan == b.maxSpan;
@@ -137,11 +137,11 @@ void copyChromosome(Chromosome& dest, const Chromosome& src) {
     dest.totalGroups = src.totalGroups;
 }
 
-// Función que agregua un cromosoma a la población y verifica si es el mejor de la población.
+// Funciï¿½n que agregua un cromosoma a la poblaciï¿½n y verifica si es el mejor de la poblaciï¿½n.
 void addChromosomeToPopulation(Population& population, Chromosome& chromosome) {
-    // Agregar el cromosoma a la población
+    // Agregar el cromosoma a la poblaciï¿½n
     population.chromosomes[population.size] = &chromosome;
-    // Actualizar el tamaño de la población
+    // Actualizar el tamaï¿½o de la poblaciï¿½n
     population.size++;
     // Si es el primer cromosoma agregado, se establece como el mejor
     if (population.size == 1) {
@@ -150,7 +150,7 @@ void addChromosomeToPopulation(Population& population, Chromosome& chromosome) {
             population.bestChromosome.groups[i] = new Group(*chromosome.groups[i]);
         }
     }
-    // Si el cromosoma recién agregado es mejor que el mejor cromosoma de la población, se establece como el mejor
+    // Si el cromosoma reciï¿½n agregado es mejor que el mejor cromosoma de la poblaciï¿½n, se establece como el mejor
     else {
         if (chromosome.problem->problemType == 1) {
             if (chromosome.maxSpan < population.bestChromosome.maxSpan) {
@@ -165,12 +165,12 @@ void addChromosomeToPopulation(Population& population, Chromosome& chromosome) {
     }
 }
 
-// Función para agrega un cromosoma a la población reemplazando otro existente.
+// Funciï¿½n para agrega un cromosoma a la poblaciï¿½n reemplazando otro existente.
 void replaceChromosomeInPopulation(Population& population, Chromosome& chromosome, int index) {
     copyChromosome(population[index], chromosome);
 }
 
-// Función para ordenar los cromosomas según su fitness.
+// Funciï¿½n para ordenar los cromosomas segï¿½n su fitness.
 void sortChromosomesByFitness(Population& population) {
     long int i,
         k = population.size - 1,
@@ -180,14 +180,14 @@ void sortChromosomesByFitness(Population& population) {
     while (ban){
         ban = 0;
         for (i = i2; i < k; i++){
-            // Se ordena la población
+            // Se ordena la poblaciï¿½n
             if (compareFitness(population[i], population[i + 1])){
                 Chromosome* aux = population.chromosomes[i];
                 population.chromosomes[i] = population.chromosomes[i + 1];
                 population.chromosomes[i + 1] = aux;
                 ban = 1;
             }
-            // Los chromosomas con fitness repetidos pasan al principio de la población
+            // Los chromosomas con fitness repetidos pasan al principio de la poblaciï¿½n
             else if (compareEqualFitness(population[i], population[i + 1])){
                 Chromosome* aux = population.chromosomes[i + 1];
                 population.chromosomes[i + 1] = population.chromosomes[i2];
@@ -198,7 +198,7 @@ void sortChromosomesByFitness(Population& population) {
         k--;
     }
 
-    // Si el cromosoma recién agregado es mejor que el mejor cromosoma de la población, se establece como el mejor
+    // Si el cromosoma reciï¿½n agregado es mejor que el mejor cromosoma de la poblaciï¿½n, se establece como el mejor
     if (population.bestChromosome.maxSpan > 0) {
         if (population.bestChromosome.problem->problemType == 1) {
             if (population[population.size - 1].maxSpan < population.bestChromosome.maxSpan) {
@@ -219,7 +219,7 @@ void sortChromosomesByFitness(Population& population) {
     }
 }
 
-// Función para ordenar una permutacion segun el volumen de los grupos de una solución.
+// Funciï¿½n para ordenar una permutacion segun el volumen de los grupos de una soluciï¿½n.
 void sortGroupsByPermutation(const Chromosome& chromosome, Permutation& order, bool ascending) {
     long int m, k, ban = 1;
     k = chromosome.totalGroups - 1;
@@ -254,7 +254,7 @@ void sortGroupsByPermutation(const Chromosome& chromosome, Permutation& order, b
     }
 }
 
-// Función para ordenar una permutacion segun el peso de los articulos que corresponden.
+// Funciï¿½n para ordenar una permutacion segun el peso de los articulos que corresponden.
 void sortPermutationByItems(const Instance& instance, Permutation& order, int size) {
     long int m, k, ban = 1;
 
@@ -272,7 +272,7 @@ void sortPermutationByItems(const Instance& instance, Permutation& order, int si
     }
 }
 
-// Función que recalcula el volumen de un grupo
+// Funciï¿½n que recalcula el volumen de un grupo
 void calculateGroupVolume(Group* group) {
     group->volume = 0;
 
@@ -302,7 +302,7 @@ void addGroupToChromosome(Chromosome& chromosome,const Group& group) {
     }
 }
 
-// Elimina los grupos vacíos de una solución
+// Elimina los grupos vacï¿½os de una soluciï¿½n
 void removeEmptyGroups(Chromosome& chromosome) {
     int lastNonEmptyGroupIndex = -1;
     for (int i = 0; i < chromosome.totalGroups; i++) {
@@ -323,12 +323,12 @@ void clearChromosome(Chromosome& chromosome) {
     chromosome.maxSpan = 0;
 }
 
-// Función para calcular el fitness de una especie
+// Funciï¿½n para calcular el fitness de una especie
 void calculateSpeciesFitness(Species& specie) {
     double fitnessSum = 0.0; // Inicializar la suma de fitness
-    int populationSize = specie.population.size; // Obtener el tamaño de la población
+    int populationSize = specie.population.size; // Obtener el tamaï¿½o de la poblaciï¿½n
 
-    // Iterar sobre cada cromosoma en la población
+    // Iterar sobre cada cromosoma en la poblaciï¿½n
     if (specie.population[0].problem->problemType == 0) {
         for (int i = 0; i < populationSize; i++) {
             Chromosome* chromosome = specie.population.chromosomes[i];
@@ -342,13 +342,13 @@ void calculateSpeciesFitness(Species& specie) {
         }
     }
 
-    // Calcular el promedio de fitness o maxSpan según el problemType
+    // Calcular el promedio de fitness o maxSpan segï¿½n el problemType
     specie.fitness = fitnessSum / populationSize; // Promedio de fitness
     
 }
 
 
-// Función que determina si todos los elementos están incluidos en un cromosoma.
+// Funciï¿½n que determina si todos los elementos estï¿½n incluidos en un cromosoma.
 bool allItemsIncluded(const Chromosome& chromosome) {
     /*/set<int> itemIds;
     int totalGroups = 0;
@@ -371,7 +371,7 @@ bool allItemsIncluded(const Chromosome& chromosome) {
     */return true;
 }
 
-// Función que comprueba si el número de grupos en un cromosoma es igual al lower bound.
+// Funciï¿½n que comprueba si el nï¿½mero de grupos en un cromosoma es igual al lower bound.
 bool checkLowerBound(const Chromosome& chromosome) {
     if (chromosome.totalGroups <= chromosome.problem->lowerBound) {
         return true;

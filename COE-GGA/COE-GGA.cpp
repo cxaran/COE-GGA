@@ -5,11 +5,11 @@
 #include "include/structures.h"
 #include "include/heuristics.h"
 #include "include/permutation.h"
+#include "include/localsearchh.h"
 
 using namespace std;
 
 void coevolution(Instance& instance, Chromosome& solution) {
-
 
     // Se carga la configuracion
     ConfigurationCOE* config = &instance.config;
@@ -84,7 +84,7 @@ void coevolution(Instance& instance, Chromosome& solution) {
 
         // ************************ Especie 4 ************************
         // Aplicar GGA 
-        GGA(&configsGGA[3], species[3], children, iteration);
+        main_localSearch(*species[3].population.chromosomes[0]);
 
 
         // Calcular el fitness de cada especie

@@ -76,20 +76,20 @@ void lowerBound(Instance& instance) {
 
 }
 
-// Función que realiza el First Fit para agregar un artículo al cromosoma.
+// Funciï¿½n que realiza el First Fit para agregar un artï¿½culo al cromosoma.
 void firstFit(Chromosome& chromosome, int itemPos, int& startGroup, bool isLast) {
     long int i;
     Item* item = getItem(chromosome, itemPos);
 
-    // Si el artículo actual supera la capacidad del grupo más vacío, se crea un nuevo grupo.
+    // Si el artï¿½culo actual supera la capacidad del grupo mï¿½s vacï¿½o, se crea un nuevo grupo.
     if (!isLast && item->weight > (chromosome.problem->capacity - chromosome.maxEmptyVolume)) {
         i = chromosome.totalGroups;
     }
     else {
-        // En caso contrario, se itera por los grupos existentes buscando un grupo con capacidad suficiente para el artículo.
+        // En caso contrario, se itera por los grupos existentes buscando un grupo con capacidad suficiente para el artï¿½culo.
         for (i = startGroup; i < chromosome.totalGroups; i++) {
             if (chromosome.getGroupVolume(i) + item->weight <= chromosome.problem->capacity) {
-                // Si se encuentra un grupo, se agrega el artículo y se actualizan los atributos del cromosoma.
+                // Si se encuentra un grupo, se agrega el artï¿½culo y se actualizan los atributos del cromosoma.
                 addItemToGroup(*chromosome.groups[i], *item);
                 if (chromosome.getGroupVolume(i) > chromosome.maxSpan) {
                     chromosome.maxSpan = chromosome.getGroupVolume(i);
@@ -122,10 +122,10 @@ void firstFit(Chromosome& chromosome, int itemPos, int& startGroup, bool isLast)
     }
 }
 
-//  Función que realiza el "firstFit" sin los ñ objetos grandes.
+//  Funciï¿½n que realiza el "firstFit" sin los ï¿½ objetos grandes.
 void firstFitN_(Chromosome& chromosome) {
     int i, j, startGroup = 0;
-    // Se incializa el volumen del grupo más vacío.
+    // Se incializa el volumen del grupo mï¿½s vacï¿½o.
     chromosome.maxEmptyVolume = chromosome.problem->capacity;
     // Si el cromosoma contiene objetos grandes, se agregan en grupos separados.
     if (chromosome.problem->n_ > 0){
@@ -154,7 +154,7 @@ void firstFitN_(Chromosome& chromosome) {
     }
 }
 
-// Función para inicializar la población, regresa la poblacion ordenada
+// Funciï¿½n para inicializar la poblaciï¿½n, regresa la poblacion ordenada
 void initializePopulation(Instance& instance, Population& population, int populationSize, bool applyFirstFit) {
     for (int i = 0; i < populationSize; i++) {
         // Creamos el cromosoma
@@ -163,7 +163,7 @@ void initializePopulation(Instance& instance, Population& population, int popula
 
         // Si se aplica firstFit
         if (applyFirstFit) {
-            // Llama a la función FF-ñ
+            // Llama a la funciï¿½n FF-ï¿½
             firstFitN_(*chromosome);
             // Calcular el fitness del cromosoma
             chromosome->fitness /= chromosome->totalGroups;
@@ -174,22 +174,3 @@ void initializePopulation(Instance& instance, Population& population, int popula
     }
 }
 
-// Función para inicializar la población, regresa la poblacion ordenada
-void initializePopulation(Instance& instance, Population& population, int populationSize, bool applyFirstFit) {
-    for (int i = 0; i < populationSize; i++) {
-        // Creamos el cromosoma
-        Chromosome* chromosome = new Chromosome();
-        chromosome->problem = &instance;
-
-        // Si se aplica firstFit
-        if (applyFirstFit) {
-            // Llama a la función FF-ñ
-            firstFitN_(*chromosome);
-            // Calcular el fitness del cromosoma
-            chromosome->fitness /= chromosome->totalGroups;
-            chromosome->iteration = 0;
-        }
-
-        addChromosomeToPopulation(population, *chromosome);
-    }
-}

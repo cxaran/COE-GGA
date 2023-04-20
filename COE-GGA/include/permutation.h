@@ -7,15 +7,15 @@
 
 using namespace std;
 
-// Estructura para una permutación de índices
+// Estructura para una permutaciï¿½n de ï¿½ndices
 struct Permutation {
-    long int indices[MAXSIZE]; // Vector de índices permutados
-    int size = 0; // Tamaño de la permutación
+    long int indices[MAXSIZE]; // Vector de ï¿½ndices permutados
+    int size = 0; // Tamaï¿½o de la permutaciï¿½n
 
-    // Constructor vacío
+    // Constructor vacï¿½o
     Permutation() {}
 
-    // Constructor con tamaño
+    // Constructor con tamaï¿½o
     Permutation(int sizePermutation) {
         size = sizePermutation;
         for (int i = 0; i < size; i++) {
@@ -23,7 +23,7 @@ struct Permutation {
         }
     }
 
-    // Constructor con tamaño y valor defecto
+    // Constructor con tamaï¿½o y valor defecto
     Permutation(int sizePermutation, int value) {
         size = sizePermutation;
         for (int i = 0; i < size; i++) {
@@ -31,7 +31,7 @@ struct Permutation {
         }
     }
 
-    // Cambiar el tamaño de la permutación
+    // Cambiar el tamaï¿½o de la permutaciï¿½n
     void reSize(int sizePermutation) {
         for (int i = sizePermutation > size ? size : 0; i < sizePermutation; i++) {
             indices[i] = i;
@@ -39,17 +39,17 @@ struct Permutation {
         size = sizePermutation;
     }
 
-    // Operador [] para acceder al i-ésimo elemento de la permutación
+    // Operador [] para acceder al i-ï¿½simo elemento de la permutaciï¿½n
     long int operator[](int i) const {
         return indices[i];
     }
 
-    // Operador [] para modificar el i-ésimo elemento de la permutación
+    // Operador [] para modificar el i-ï¿½simo elemento de la permutaciï¿½n
     long int& operator[](int i) {
         return indices[i];
     }
 
-    // Permutar la posición de dos elementos de la permutación
+    // Permutar la posiciï¿½n de dos elementos de la permutaciï¿½n
     void swap(int i, int j) {
         if (i != j) {
             indices[i] += indices[j];
@@ -58,9 +58,9 @@ struct Permutation {
         }
     }
 
-    // Función que organiza aleatoriamente la permutación dentro de un rango
+    // Funciï¿½n que organiza aleatoriamente la permutaciï¿½n dentro de un rango
     void randomize(int* seed, int start, int end) {
-        // Generar una permutación aleatoria dentro del rango
+        // Generar una permutaciï¿½n aleatoria dentro del rango
         for (int i = end - 1; i >= start; i--) {
             int j = start + get_rand(seed, end - start) - 1;
             swap(i, j);

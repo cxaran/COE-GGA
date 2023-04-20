@@ -7,8 +7,8 @@
 #include "mutation.h"
 
 /**
- * @brief Ejecuta el algoritmo genético.
- * @param config puntero a un objeto ConfigurationGGA con la configuración para el algoritmo genético.
+ * @brief Ejecuta el algoritmo genï¿½tico.
+ * @param config puntero a un objeto ConfigurationGGA con la configuraciï¿½n para el algoritmo genï¿½tico.
  * @param specie referencia a un objeto Species que representa la especie a reproducir.
  * @param children referencia a un objeto Population para almacenar la descendencia.
 */

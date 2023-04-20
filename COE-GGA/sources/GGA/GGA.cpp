@@ -1,6 +1,6 @@
 #include "../../include/GGA/GGA.h"
 
-// Funcion para ejecutar el algoritmo genético.
+// Funcion para ejecutar el algoritmo genï¿½tico.
 void GGA(ConfigurationGGA* config, Species& specie, Population& children, int iteration) {
 
     // Inicializacion de variables
@@ -9,17 +9,17 @@ void GGA(ConfigurationGGA* config, Species& specie, Population& children, int it
     config->bestIndividuals.reSize(specie.population.size);
     config->randomIndividuals.reSize(specie.population.size);
 
-    // Ordena los individuos de la población en orden ascendente de su fitness
+    // Ordena los individuos de la poblaciï¿½n en orden ascendente de su fitness
     sortChromosomesByFitness(specie.population);
    
     //------------- Controlled selection for crossover      -------------------------------------------------------------------
 
     // Seleccionamos los peores individuos como padres promedio para la cruza
     config->randomIndividuals.randomize(&config->seed, 0, (int)(specie.population.size - (int)(specie.population.size * config->elitism)));
-    // Seleccionamos los mejores individuos como padres élite para la cruza
+    // Seleccionamos los mejores individuos como padres ï¿½lite para la cruza
     config->bestIndividuals.randomize(&config->seed, (1 - config->crossover) * specie.population.size, specie.population.size);
 
-    //Inicialización de variables
+    //Inicializaciï¿½n de variables
     k = 0;
     h = specie.population.size - 1;
 
@@ -32,30 +32,30 @@ void GGA(ConfigurationGGA* config, Species& specie, Population& children, int it
 
         // Cruza controlada entre los cromosomas parent1Index1 y parent1Index2 para crear los hijos j
         controlledCrossover(children[j], specie.population[parent1Index1], specie.population[parent1Index2]);
-        // Establece la iteración en que se genero el hijo j
+        // Establece la iteraciï¿½n en que se genero el hijo j
         children[j].iteration = iteration;
-        // Divide la aptitud total del hijo j entre el número total de grupos del hijo j
+        // Divide la aptitud total del hijo j entre el nï¿½mero total de grupos del hijo j
         children[j].fitness /= (double)children[j].totalGroups;
 
         // Cruza controlada entre los cromosomas parent1Index2 y parent1Index1 para crear los hijos j+1
         controlledCrossover(children[j + 1], specie.population[parent1Index2], specie.population[parent1Index1]);
-        // Establece la iteración en que se genero el hijo j+1
+        // Establece la iteraciï¿½n en que se genero el hijo j+1
         children[j + 1].iteration = iteration;
-        // Divide la aptitud total del hijo j+1 entre el número total de grupos del hijo j+1
+        // Divide la aptitud total del hijo j+1 entre el nï¿½mero total de grupos del hijo j+1
         children[j + 1].fitness /= (double)children[j + 1].totalGroups;
 
     }
 
     //------------- Controlled replacement for crossover    -------------------------------------------------------------------
 
-    //Inicialización de variables
+    //Inicializaciï¿½n de variables
     k = 0;
     // Remplaza randomIndividuals con los primeros hijos generados 
     for (j = 0; j < config->crossover / 2 * specie.population.size - 1; j++) {
         replaceChromosomeInPopulation(specie.population, children[j], config->randomIndividuals[k++]);
     }
     k = 0;
-    // Los hijos restantes entran a la población remplazando las peores soluciones
+    // Los hijos restantes entran a la poblaciï¿½n remplazando las peores soluciones
     for (i = specie.population.size - 1; i > specie.population.size - (config->crossover / 2 * specie.population.size); i--, j++) {
         while (specie.population[k].iteration == iteration) k++;
         replaceChromosomeInPopulation(specie.population, children[j], k++);
@@ -68,7 +68,7 @@ void GGA(ConfigurationGGA* config, Species& specie, Population& children, int it
 
     // El individuo a ser remplazado por las soluciones clonadas
     j = 0;
-    // Se recorre la población empezando por el mejor individuo hasta un número definido de mutaciones
+    // Se recorre la poblaciï¿½n empezando por el mejor individuo hasta un nï¿½mero definido de mutaciones
     for (i = specie.population.size - 1; i > specie.population.size - (config->mutation * specie.population.size); i--) {
 
         // Si el cromosoma a mutar pertenece a los mejores individuos y puede ser clonado
@@ -77,11 +77,11 @@ void GGA(ConfigurationGGA* config, Species& specie, Population& children, int it
             // Se clona remplazando a las peores soluciones
             replaceChromosomeInPopulation(specie.population, specie.population[i], j);
 
-            // Se le aplica una mutación adaptativa a j con una tasa de mutación eliteRateK
+            // Se le aplica una mutaciï¿½n adaptativa a j con una tasa de mutaciï¿½n eliteRateK
             adaptiveMutation(specie.population[j], config->eliteRateK, &config->mutationSeed, true);
-            // Establece la iteración en que se genero individuo mutado j
+            // Establece la iteraciï¿½n en que se genero individuo mutado j
             specie.population[j].iteration = iteration;
-            // Divide la aptitud total del individuo mutado j entre el número total de grupos
+            // Divide la aptitud total del individuo mutado j entre el nï¿½mero total de grupos
             specie.population[j].fitness /= specie.population[j].totalGroups;
             // Siguiente individuo a ser remplazado
             j++;
@@ -91,11 +91,11 @@ void GGA(ConfigurationGGA* config, Species& specie, Population& children, int it
         // Si el cromosoma a mutar no pertenece a los mejores individuos
         else {
 
-            // Se le aplica una mutación adaptativa a i con una tasa de mutación averageRateK
+            // Se le aplica una mutaciï¿½n adaptativa a i con una tasa de mutaciï¿½n averageRateK
             adaptiveMutation(specie.population[i], config->averageRateK, &config->mutationSeed, false);
-            // Establece la iteración en que se genero individuo mutado j
+            // Establece la iteraciï¿½n en que se genero individuo mutado j
             specie.population[i].iteration = iteration;
-            // Divide la aptitud total del individuo mutado i entre el número total de grupos
+            // Divide la aptitud total del individuo mutado i entre el nï¿½mero total de grupos
             specie.population[i].fitness /= specie.population[i].totalGroups;
         }
     }

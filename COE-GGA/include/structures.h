@@ -35,12 +35,12 @@ using namespace std;
 
 // Estructura de configuracion del algoritmo coevolutivo
 struct ConfigurationCOE {
-    unsigned int populationSize = 100; // Tamaño de la población
-    unsigned int iterations = 500; // Número de iteraciones
+    unsigned int populationSize = 100; // Tamaï¿½o de la poblaciï¿½n
+    unsigned int iterations = 500; // Nï¿½mero de iteraciones
     unsigned int learningWindow = 10; // Ventana de aprendizaje
     float elitism = 0.1; // Tasa de elitismo
-    float speciesShrinkRate = 0.1; // Tasa de disminución del tamaño de las especies
-    int seed = 1; // Semilla para el generador de números aleatorios
+    float speciesShrinkRate = 0.1; // Tasa de disminuciï¿½n del tamaï¿½o de las especies
+    int seed = 1; // Semilla para el generador de nï¿½meros aleatorios
     int verbose = 1; // Verbosidad (1 para mostrar en pantalla las operaciones realizadas)
 };
 
@@ -48,180 +48,180 @@ struct ConfigurationCOE {
 
 // Estructura de configuracion del genetico
 struct ConfigurationGGA {
-    float mutation = 0.82; // Tasa de mutación
+    float mutation = 0.82; // Tasa de mutaciï¿½n
     float crossover = 0.22; // Tasa de cruce
-    float averageRateK = 1.3; // Tasa de cambio de la mutación para la población
-    float eliteRateK = 4.0; // Tasa de cambio de la mutación para la población elite
+    float averageRateK = 1.3; // Tasa de cambio de la mutaciï¿½n para la poblaciï¿½n
+    float eliteRateK = 4.0; // Tasa de cambio de la mutaciï¿½n para la poblaciï¿½n elite
     float elitism = 0.1; // Tasa de elitismo
     unsigned int lifeSpan = 10; // Tiempo de vida de un individuo en generaciones
-    int seed = 1; // Semilla para el generador de números aleatorios en permutaciones
-    int mutationSeed = 1; // Semilla para el generador de números aleatorios en la muta
-    Permutation bestIndividuals; // Mejores individuos para reproducción
-    Permutation randomIndividuals; // Individuos aleatorios para reproducción
+    int seed = 1; // Semilla para el generador de nï¿½meros aleatorios en permutaciones
+    int mutationSeed = 1; // Semilla para el generador de nï¿½meros aleatorios en la muta
+    Permutation bestIndividuals; // Mejores individuos para reproducciï¿½n
+    Permutation randomIndividuals; // Individuos aleatorios para reproducciï¿½n
 };
 
-// Estructura para un artículo
+// Estructura para un artï¿½culo
 struct Item {
-    const unsigned int id; // ID del artículo
-    long unsigned int weight; // Peso minimo del artículo
-    long unsigned int weights[MAXITEMS]; // Pesos del artículo
-    unsigned int position; // Posición en el orden de mayor a menor peso
+    const unsigned int id; // ID del artï¿½culo
+    long unsigned int weight; // Peso minimo del artï¿½culo
+    long unsigned int weights[MAXITEMS]; // Pesos del artï¿½culo
+    unsigned int position; // Posiciï¿½n en el orden de mayor a menor peso
 };
 
 // Estructura para un grupo
 struct Group {
     unsigned int id; // ID del grupo
     unsigned int volume = 0; // Volumen del grupo
-    Item* items[MAXITEMS]; // Artículos en el grupo
-    unsigned int totalItems = 0; // Total de artículos en el grupo
+    Item* items[MAXITEMS]; // Artï¿½culos en el grupo
+    unsigned int totalItems = 0; // Total de artï¿½culos en el grupo
 };
 
 // Estructura para una instancia de un problema
 struct Instance {
-    unsigned int numItems = 0; // Número de artículos
-    unsigned int numGroups = 0; // Número grupos posibles
+    unsigned int numItems = 0; // Nï¿½mero de artï¿½culos
+    unsigned int numGroups = 0; // Nï¿½mero grupos posibles
     long unsigned int capacity; // Capacidad de los grupos
-    unsigned int knowBest; // Mejor solución conocida
-    unsigned int lowerBound; // Límite inferior
+    unsigned int knowBest; // Mejor soluciï¿½n conocida
+    unsigned int lowerBound; // Lï¿½mite inferior
     unsigned int n_ = 0; // Articulos grandes
     long double totalWeight = 0; // Peso total acumulado
     long unsigned int minWeight; // Peso minimo de los articulos
-    Item* items [MAXITEMS]; // Artículos
-    Permutation permutation; // Permutación de los índices de los artículos
-    long int weightFactor = 1.0; // Factor de multiplicación para convertir flotantes a enteros
-    ConfigurationCOE config; // Configuración del algoritmo coevolutivo
-    unsigned int problemType = 0; // Tipo de problema de agrupación
+    Item* items [MAXITEMS]; // Artï¿½culos
+    Permutation permutation; // Permutaciï¿½n de los ï¿½ndices de los artï¿½culos
+    long int weightFactor = 1.0; // Factor de multiplicaciï¿½n para convertir flotantes a enteros
+    ConfigurationCOE config; // Configuraciï¿½n del algoritmo coevolutivo
+    unsigned int problemType = 0; // Tipo de problema de agrupaciï¿½n
 };
 
 // Estructura para un cromosoma
 struct Chromosome {
     Instance* problem; // Instancia del problema
-    unsigned int iteration = 0; // Iteración en la que se generó la solución
-    double fitness = 0.0; // Aptitud de la solución
-    Group* groups[MAXITEMS]; // Grupos en la solución
+    unsigned int iteration = 0; // Iteraciï¿½n en la que se generï¿½ la soluciï¿½n
+    double fitness = 0.0; // Aptitud de la soluciï¿½n
+    Group* groups[MAXITEMS]; // Grupos en la soluciï¿½n
     unsigned int totalGroups = 0; // Total de grupos
-    unsigned int maxEmptyVolume; // Volumen del grupo más vacío
-    unsigned int maxSpan = 0; // Variable maxSpan para almacenar el máximo span de los grupos
+    unsigned int maxEmptyVolume; // Volumen del grupo mï¿½s vacï¿½o
+    unsigned int maxSpan = 0; // Variable maxSpan para almacenar el mï¿½ximo span de los grupos
     float time; // Tiempo de proceso
 
-     // Función para obtener el volumen de un grupo en particular
+     // Funciï¿½n para obtener el volumen de un grupo en particular
     long unsigned int getGroupVolume(int groupIndex) const {
         return groupIndex < totalGroups ? groups[groupIndex]->volume : 0;
     }
 };
 
-// Estructura para una población de cromosomas
+// Estructura para una poblaciï¿½n de cromosomas
 struct Population {
-    unsigned int size = 0; // Tamaño de la población
+    unsigned int size = 0; // Tamaï¿½o de la poblaciï¿½n
     Chromosome* chromosomes[MAXSOLS]; // Cromosomas
-    Chromosome bestChromosome; // Mejor cromosoma encontrado en la población
-    // Operador [] para acceder al i-ésimo elemento de la permutación
+    Chromosome bestChromosome; // Mejor cromosoma encontrado en la poblaciï¿½n
+    // Operador [] para acceder al i-ï¿½simo elemento de la permutaciï¿½n
     const Chromosome* operator[](int i) const { return chromosomes[i]; }
-    // Operador [] para modificar el i-ésimo elemento de la permutación
+    // Operador [] para modificar el i-ï¿½simo elemento de la permutaciï¿½n
     Chromosome& operator[](int i) { return *chromosomes[i]; }
 };
 
 // Estructura para una especie
 struct Species {
-    float size; // Tamaño de la especie (representado como un float)
-    Population population; // Población de la especie
+    float size; // Tamaï¿½o de la especie (representado como un float)
+    Population population; // Poblaciï¿½n de la especie
     double fitness; // Fitness de la especie
 };
 
 /**
- * @brief Ordena los elementos de una instancia según su peso.
+ * @brief Ordena los elementos de una instancia segï¿½n su peso.
  * @param instance Instancia del problema
  */
 void sortItemsByWeight(Instance& instance);
 
 /**
- * @brief Vacía los elementos del grupo
+ * @brief Vacï¿½a los elementos del grupo
  * @param group El grupo que se desea vaciar
 */
 void clearGroup(Group& group);
 
 /**
- * @brief Obtiene el articulo en la posición indicada segun su peso.
- * @param chromosome Referencia constante a un objeto Chromosome que contiene la información de la solución.
- * @param itemPos Entero que indica el índice del objeto a consultar.
- * @return El item en la posición indicada.
+ * @brief Obtiene el articulo en la posiciï¿½n indicada segun su peso.
+ * @param chromosome Referencia constante a un objeto Chromosome que contiene la informaciï¿½n de la soluciï¿½n.
+ * @param itemPos Entero que indica el ï¿½ndice del objeto a consultar.
+ * @return El item en la posiciï¿½n indicada.
 */
 Item* getItem(const Chromosome& chromosome, int itemPos);
 
 /**
  * @brief Agrega un elemento a un grupo existente si es posible.
- * @param group Grupo al que se intentará agregar el elemento.
- * @param item Elemento que se agregará al grupo.
+ * @param group Grupo al que se intentarï¿½ agregar el elemento.
+ * @param item Elemento que se agregarï¿½ al grupo.
 */
 void addItemToGroup(Group& group, Item& item);
 
 /**
  * @brief Crea un nuevo grupo con el elemento especificado y lo agrega al cromosoma si es posible.
- * @param chromosome Cromosoma al que se intentará agregar el grupo.
- * @param item Elemento que se agregará al nuevo grupo.
+ * @param chromosome Cromosoma al que se intentarï¿½ agregar el grupo.
+ * @param item Elemento que se agregarï¿½ al nuevo grupo.
  */
 void createNewGroupWithItem(Chromosome& chromosome, Item& item);
 
 /**
- * @brief Ordena aleatoriamente permutation sin tomar los ñ objetos grandes.
+ * @brief Ordena aleatoriamente permutation sin tomar los ï¿½ objetos grandes.
  * @param instance Instancia del problema
  */
 void shufflePermutationN_(Instance& instance);
 
 /**
- * @brief Elimina un item de un grupo dado su posición en el grupo
- * @param group Referencia al grupo del cual se eliminará el item
- * @param itemPos Posición del item que se desea eliminar en el grupo
+ * @brief Elimina un item de un grupo dado su posiciï¿½n en el grupo
+ * @param group Referencia al grupo del cual se eliminarï¿½ el item
+ * @param itemPos Posiciï¿½n del item que se desea eliminar en el grupo
 */
 void removeItemFromGroup(Group& group, int itemPos);
 
 /**
- * @brief Agrega un cromosoma a la población y actualiza el mejor cromosoma si es necesario.
- * @param population Vector que representa la población actual.
- * @param chromosome Cromosoma que se desea agregar a la población.
+ * @brief Agrega un cromosoma a la poblaciï¿½n y actualiza el mejor cromosoma si es necesario.
+ * @param population Vector que representa la poblaciï¿½n actual.
+ * @param chromosome Cromosoma que se desea agregar a la poblaciï¿½n.
 */
 void addChromosomeToPopulation(Population& population, Chromosome& chromosome);
 
 /**
- * @brief Ordena los cromosomas de una población de peor a mejor según su aptitud
- * @param population Población de cromosomas
+ * @brief Ordena los cromosomas de una poblaciï¿½n de peor a mejor segï¿½n su aptitud
+ * @param population Poblaciï¿½n de cromosomas
 */
 void sortChromosomesByFitness(Population& population);
 
 /**
- * @brief Ordena una permutación de los índices de grupos en una solución, en orden descendente según su volumen.
- * @param chromosome La solución cuyos grupos se ordenarán.
- * @param order La permutación que se ordenará.
+ * @brief Ordena una permutaciï¿½n de los ï¿½ndices de grupos en una soluciï¿½n, en orden descendente segï¿½n su volumen.
+ * @param chromosome La soluciï¿½n cuyos grupos se ordenarï¿½n.
+ * @param order La permutaciï¿½n que se ordenarï¿½.
  * @param ascending Si el orden es de forma ascendente, de ser falso sera descendente.
 */
 void sortGroupsByPermutation(const Chromosome& chromosome, Permutation& order, bool ascending);
 
 /**
- * @brief Función para ordenar una permutacion según el peso de los artículos que corresponden.
+ * @brief Funciï¿½n para ordenar una permutacion segï¿½n el peso de los artï¿½culos que corresponden.
  * @param instance Instancia del problema.
- * @param order Permutación a ordenar.
- * @param size Tamaño de la permutacion.
+ * @param order Permutaciï¿½n a ordenar.
+ * @param size Tamaï¿½o de la permutacion.
 */
 void sortPermutationByItems(const Instance& instance, Permutation& order, int size);
 
 /**
  * @brief Agrega un grupo existente a un cromosoma, actualiza sus variables asociadas.
- * @param chromosome El cromosoma al que se le agregará el grupo.
- * @param group El grupo que se agregará al cromosoma.
+ * @param chromosome El cromosoma al que se le agregarï¿½ el grupo.
+ * @param group El grupo que se agregarï¿½ al cromosoma.
 */
 void addGroupToChromosome(Chromosome& chromosome,const Group& group);
 
 /**
- * @brief Elimina los grupos vacíos de una solución.
+ * @brief Elimina los grupos vacï¿½os de una soluciï¿½n.
  * @param chromosome Referencia al cromosoma que se va a procesar.
 */
 void removeEmptyGroups(Chromosome& chromosome);
 
 /**
- * @brief Agrega un cromosoma a la población reemplazando otro existente.
- * @param population Población actual.
+ * @brief Agrega un cromosoma a la poblaciï¿½n reemplazando otro existente.
+ * @param population Poblaciï¿½n actual.
  * @param newChromosome Nuevo cromosoma a agregar.
- * @param replaceIndex Índice del cromosoma a reemplazar.
+ * @param replaceIndex ï¿½ndice del cromosomaï¿½aï¿½reemplazar.
 */
 void replaceChromosomeInPopulation(Population& population, Chromosome& chromosome, int index);
 
@@ -232,21 +232,21 @@ void replaceChromosomeInPopulation(Population& population, Chromosome& chromosom
 void clearChromosome(Chromosome& chromosome);
 
 /**
- * @brief Función para calcular el fitness de una especie
+ * @brief Funciï¿½n para calcular el fitness de una especie
  * @param specie a calcular el fitness
 */
 void calculateSpeciesFitness(Species& specie);
 
 /**
- * @brief Determina si todos los elementos están incluidos en un cromosoma.
+ * @brief Determina si todos los elementos estï¿½n incluidos en un cromosoma.
  * @param chromosome Cromosoma que se desea validar.
 */
 bool allItemsIncluded(const Chromosome& chromosome);
 
 /**
- * @brief Comprueba si el número de grupos en un cromosoma es igual al lower bound.
+ * @brief Comprueba si el nï¿½mero de grupos en un cromosoma es igual al lower bound.
  * @param chromosome Referencia al cromosoma a comprobar.
- * @return Verdadero si el número de grupos en el cromosoma es igual al lower bound, falso en caso contrario.
+ * @return Verdadero si el nï¿½mero de grupos en el cromosoma es igual al lower bound, falso en caso contrario.
  */
 bool checkLowerBound(const Chromosome& chromosome);
 
