@@ -84,8 +84,9 @@ void coevolution(Instance& instance, Chromosome& solution) {
 
         // ************************ Especie 4 ************************
         // Aplicar GGA 
+        cout << "local";
         main_localSearch(*species[3].population.chromosomes[0]);
-
+        cout << "termino";
 
         // Calcular el fitness de cada especie
         for (int i = 0; i < TOTALSPECIES; ++i) {

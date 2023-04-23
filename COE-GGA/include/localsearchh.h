@@ -70,4 +70,7 @@ void refactorGroupVolume_bestk(Group& group);
 //Funcion auxiliar para añadir un item sin agregar el peso del mismo
 bool aux_add_item(Group& group, Item& item);
 
+//Funcion para añadir un item de un grupo a otro
+bool addItemGrouptoGroup(Group& group, Item& item, Group& group2);
+
 #endif
