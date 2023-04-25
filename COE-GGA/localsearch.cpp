@@ -176,19 +176,25 @@ void oneJobRoutine(Chromosome& chromosome) {
 bool createNewGroupWithoutItem(Chromosome& chromosome, int groups_chromo,int indice) {
 	// Verificar si todav a se pueden crear m s grupos.
 	Group* group;
-	if (groups_chromo < chromosome.problem->numGroups) {
+	if (chromosome.groups[chromosome.totalGroups]) {
+		if (groups_chromo < chromosome.problem->numGroups) {
+			group = chromosome.groups[chromosome.totalGroups];
+			clearGroup(*group);
+		}
+		else {
+			//cout << groups_chromo << endl;
+			exit(3);
+			return false;
+		}
+	}
+	else {
+		//cout << groups_chromo << endl;
 		group = new Group();
 		chromosome.groups[chromosome.totalGroups] = group;
 		group->id = chromosome.totalGroups;
 		chromosome.totalGroups++;
 		//cout << chromosome.groups.size() << endl;
 		return true;
-	}
-	// Salir con un codigo de error.
-	else {
-		//cout << groups_chromo << endl;
-		exit(3);
-		return false;
 	}
 }
 
@@ -228,7 +234,7 @@ void reorder_chromosome(Chromosome& chromosome, int groups_chromo) {
 				if (item->weight == item->weights[z]) {
 					bool added = aux_add_item(*chromosome.groups[z], *item);
 					if (added == true) {
-						DeleteItemFromGroup(*chromosome.groups[i],*item, i);
+						DeleteItemFromGroup(*chromosome.groups[i],*item, y);
 					}
 					break;
 				}
@@ -647,8 +653,9 @@ void main_localSearch(Chromosome& chromosome) {
 	}
 	groups_chromo = chromosome.totalGroups;
 	reorder_chromosome(chromosome,groups_chromo);
-	printChromosomeAsJson(chromosome, true);
 	oneJobRoutine(chromosome);
-	//oneByOneSwapRoutine(chromosome);
+	oneByOneSwapRoutine(chromosome);
+	printChromosomeAsJson(chromosome, true);
+
 	//twoByTwoSwapRoutine(chromosome);
 }
