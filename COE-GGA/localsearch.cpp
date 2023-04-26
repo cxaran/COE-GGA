@@ -199,7 +199,7 @@ bool createNewGroupWithoutItem(Chromosome& chromosome, int groups_chromo,int ind
 }
 
 bool aux_add_item(Group& group, Item& item) {
-	cout << "total_before" << group.totalItems << " ";
+	//cout << "total_before" << group.totalItems << " ";
 	//cout << "probar" << item.weights[group2.id] << "\n";
 	 // Verificar si el objeto ya est  en el grupo.
 	for (int i = 0; i < group.totalItems;i++) {
@@ -209,7 +209,7 @@ bool aux_add_item(Group& group, Item& item) {
 	//agregar el objeto.
 	//group.totalItems++;
 	group.items[group.totalItems++] = &item;
-	cout <<"total_after"<< group.totalItems << " ";
+	//cout <<"total_after"<< group.totalItems << " ";
 	return true;
 }
 
@@ -258,26 +258,26 @@ void reorder_chromosome(Chromosome& chromosome, int groups_chromo) {
 }
 bool swapJobs(Group& origin_machine, Group& target_machine, Item* origin_job, Item* target_job,int position_or,int position_targ) {
 	//Before swap
-	cout << "origin_machine_volume" << origin_machine.volume << "\n";
-	cout << "target_machine_volume" << target_machine.volume << "\n";
-	cout << "origin_job" << origin_job->weight << "\n";
-	cout << "target_job" << target_job->weight << "\n";
+	//cout << "origin_machine_volume" << origin_machine.volume << "\n";
+	//cout << "target_machine_volume" << target_machine.volume << "\n";
+	//cout << "origin_job" << origin_job->weight << "\n";
+	//cout << "target_job" << target_job->weight << "\n";
 
 	bool deleted=DeleteItemFromGroup(origin_machine,*origin_job,position_or);
 	bool added = addItemGrouptoGroup(target_machine, *origin_job, origin_machine);
 
-	cout << "second_E" << "\n";
-	cout << "origin_machine_volume" << origin_machine.volume << "\n";
-	cout << "target_machine_volume" << target_machine.volume << "\n";
+	//cout << "second_E" << "\n";
+	//cout << "origin_machine_volume" << origin_machine.volume << "\n";
+	//cout << "target_machine_volume" << target_machine.volume << "\n";
 	//after swap
 	DeleteItemFromGroup(target_machine,*target_job,position_targ);
 	bool added2 = addItemGrouptoGroup(origin_machine, *target_job, target_machine);
 
 	//Before swap
-	cout << "origin_machine_volume" << origin_machine.volume << "\n";
-	cout << "target_machine_volume" << target_machine.volume << "\n";
-	cout << "origin_job" << origin_job->weight << "\n";
-	cout << "target_job" << target_job->weight << "\n";
+	//cout << "origin_machine_volume" << origin_machine.volume << "\n";
+	//cout << "target_machine_volume" << target_machine.volume << "\n";
+	//cout << "origin_job" << origin_job->weight << "\n";
+	//cout << "target_job" << target_job->weight << "\n";
 
 	//posible error direccion de memoria -- temp
 	return true;
@@ -343,23 +343,23 @@ void oneByOneSwapRoutine(Chromosome& chromosome) {
 		//Se obtiene makespan actual
 		double prev_makespan = finalMakeSpan(chromosome);
 		int no_swap_count = chromosome.problem->numItems;
-		//cout << "before_move_makespan" << prev_makespan<< "\n";
+		iter = iter + 1;
+	//	cout << "before_move_makespan" << prev_makespan<< "\n";
 		//Se crea vector booleano que se usara para identificar que cada una de las maquinas se haya trabajado.
 		vector<bool> done_list(maquinas);
 		for (int i = 0; i < maquinas; i++) {
 			int indx = chromosome.groups[i]->totalItems;
 			for (int y = 0; y < indx; y++) {
-				Item* item = *chromosome.groups[i]->items;
 				bool move_at_least_once = false;
 				bool break_flag = false;
 				for (int k = 1; k < maquinas; k++) {
 					Group target_machine = *chromosome.groups[(i + k) % maquinas];
 					for (int z = 0; z < target_machine.totalItems; z++) {
 						moved = false;
-						move_or_not_to_move = checkSwapSpan(chromosome, *chromosome.groups[i], *chromosome.groups[(i + k) % maquinas], item, chromosome.groups[(i + k) % maquinas]->items[z]);
+						move_or_not_to_move = checkSwapSpan(chromosome, *chromosome.groups[i], *chromosome.groups[(i + k) % maquinas], chromosome.groups[i]->items[y], chromosome.groups[(i + k) % maquinas]->items[z]);
 						//cout << "boolean" << move_or_not_to_move << "\n";
 						if (move_or_not_to_move == true) {
-							moved = swapJobs(*chromosome.groups[i], *chromosome.groups[(i + k) % maquinas], item, chromosome.groups[(i + k) % maquinas]->items[z],y,z);
+							moved = swapJobs(*chromosome.groups[i], *chromosome.groups[(i + k) % maquinas], chromosome.groups[i]->items[y], chromosome.groups[(i + k) % maquinas]->items[z],y,z);
 							move_at_least_once = true;
 							if (moved == true) {
 								//cout << i+k << " ";
@@ -381,7 +381,7 @@ void oneByOneSwapRoutine(Chromosome& chromosome) {
 				prev_makespan = finalMakeSpan(chromosome);
 			}
 		}
-		if (no_swap_count == 0) {
+		if (no_swap_count == 0 || iter>=120 ) {
 			done = true;
 			//cout << "hola";
 			//calculateFitness(chromosome);
@@ -534,7 +534,7 @@ bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, 
 			for (int i = 1; i < maquinas; i++) {
 
 				Group target_machine = *chromosome.groups[(machine.id + i) % maquinas];
-				target_pairs = uniquePairs(*chromosome.groups[(machine.id + i) % maquinas]->items, maquinas,machine.totalItems);
+				target_pairs = uniquePairs(*chromosome.groups[(machine.id + i) % maquinas]->items, maquinas,target_machine.totalItems);
 				int cont2 = 0;
 				for (auto const& pair2 : target_pairs) {
 					move_or_not_to_move = checkTwoSwapSpan(chromosome, machine, *chromosome.groups[(machine.id + i) % maquinas], pair1, pair2);
@@ -655,7 +655,6 @@ void main_localSearch(Chromosome& chromosome) {
 	reorder_chromosome(chromosome,groups_chromo);
 	oneJobRoutine(chromosome);
 	oneByOneSwapRoutine(chromosome);
+	twoByTwoSwapRoutine(chromosome);
 	printChromosomeAsJson(chromosome, true);
-
-	//twoByTwoSwapRoutine(chromosome);
 }
