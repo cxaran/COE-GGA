@@ -50,7 +50,7 @@ void oneByOneSwapRoutine(Chromosome& chromosome);
 //Reordenar los items en grupos del chromosoma
 void reorder_chromosome(Chromosome& chromosome, int groups_chromo);
 //Funcion para generar pares
-vector<vector<Item*>> uniquePairs(Item* items, int maquinas,int totalItems);
+vector<vector<Item*>> uniquePairs(Group& machine, int maquinas,int totalItems);
 
 //Funcion de ayuda para mover trabajos
 bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, int maquinas);
@@ -59,7 +59,7 @@ bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, 
 void twoByTwoSwapRoutine(Chromosome& chromosome);
 
 //Funcion para generar pares aleatorios
-vector<vector<Item*>> rand_pair(Item* items, int num_par, int totalItems);
+vector<vector<Item*>> rand_pair(Group& machine, int num_par, int totalItems);
 
 //Funcion para checar si mover el par de trabajos a otras maquinas representa mejoria
 bool checkTwoSwapSpan(Chromosome& chromosome, Group& origin_machine, Group& target_machine, vector<Item*>pair1, vector<Item*>pair2);
@@ -72,5 +72,8 @@ bool aux_add_item(Group& group, Item& item);
 
 //Funcion para añadir un item de un grupo a otro
 bool addItemGrouptoGroup(Group& group, Item& item, Group& group2);
+
+//Funcion para calcular el porcentaje de pares a generar
+double calculatePercent_par(int TotalItems);
 
 #endif
