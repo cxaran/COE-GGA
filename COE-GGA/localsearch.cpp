@@ -160,7 +160,7 @@ void oneJobRoutine(Chromosome& chromosome) {
 				prev_makespan = finalMakeSpan(chromosome);
 			}
 			//Si todas las maquinas fueron procesadas se termina el proceso.
-			if (isDone(done_list)) {
+			if (isDone(done_list) || iter>=1000) {
 				done = true;
 				//cout << prev_makespan << " ";
 				//calculateFitness(chromosome);
@@ -201,8 +201,8 @@ bool aux_add_item(Group& group, Item& item) {
 	//cout << "probar" << item.weights[group2.id] << "\n";
 	 // Verificar si el objeto ya est  en el grupo.
 	for (int i = 0; i < group.totalItems;i++) {
-	Item* items = group.items[i];
-	if (items[i].id == item.id) return false;
+	//Item* items = group.items[i];
+	if (group.items[i]->id == item.id) return false;
 	}
 	//agregar el objeto.
 	//group.totalItems++;
@@ -219,20 +219,23 @@ void refactorGroupVolume_bestk(Group& group) {
 }
 void reorder_chromosome(Chromosome& chromosome, int groups_chromo) {
 	//cout << groups_chromo;
+	bool group_same = false;
 	for (int i = 0; i < groups_chromo; i++) {
 		int indx = chromosome.groups[i]->totalItems;
 		//cout << "indx" << chromosome.groups[i]->totalItems << " ";
-		for (int y = 0; y < indx; y++) {
-			Item* item = *chromosome.groups[i]->items;
-			//unsigned long int *weights= item->weights;
+		for (int y = chromosome.groups[i]->totalItems - 1; y >= 0;y--) {
+			//cout << chromosome.groups[i]->items[y]->id;
+			Item* item = chromosome.groups[i]->items[y];
+		//	unsigned long int *weights= item->weights;
 			//cout << sizeof(weights) << "of";
 			for (int z = 0; z < chromosome.totalGroups; z++) {
 				//cout << " " << item->weights[z] << "f ";
 				//cout << item->weight << "menor";
 				if (item->weight == item->weights[z]) {
-					bool added = aux_add_item(*chromosome.groups[z], *item);
-					if (added == true) {
-						DeleteItemFromGroup(*chromosome.groups[i],*item, y);
+					if (chromosome.groups[i]->id == z) { group_same = true; }
+					bool added = aux_add_item(*chromosome.groups[z], *chromosome.groups[i]->items[y]);
+					if ((added == true) || group_same!=true) {
+						DeleteItemFromGroup(*chromosome.groups[i], *chromosome.groups[i]->items[y], y);
 					}
 					break;
 				}
@@ -550,42 +553,7 @@ bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, 
 	/*for (int x = 0; x < machine.items.size(); x++) {
 		cout << machine.items[x]->id << " ";
 	}*/
-	if (num_trabajos <= 400) {
-		
-		origin_pairs = uniquePairs(machine, maquinas,machine.totalItems);
-		/*for (auto const& pair1 : origin_pairs) {
-			cout << pair1[0]->id << " " << pair1[1]->id << " ";
-			cout << "\n";
-		}*/
-		int cont = 0;
-		for (auto const& pair1 : origin_pairs) {
-		     //cout << origin_pairs[1][0]->id <<"p" <<origin_pairs[2][1]->id << " " << origin_pairs[2][2]->id << " ";
-			//cout << "entro_pares" << pair1[0]->id
-			//cout <<"or"<< origin_pairs.size() << " ";
-			for (int i = 1; i < maquinas; i++) {
-
-				Group target_machine = *chromosome.groups[(machine.id + i) % maquinas];
-				target_pairs = uniquePairs(*chromosome.groups[(machine.id + i) % maquinas], maquinas,target_machine.totalItems);
-				int cont2 = 0;
-				for (auto const& pair2 : target_pairs) {
-					move_or_not_to_move = checkTwoSwapSpan(chromosome, machine, *chromosome.groups[(machine.id + i) % maquinas], pair1, pair2);
-					//cout << move_or_not_to_move;
-					if (move_or_not_to_move == true) {
-						//cout << move_or_not_to_move << " ";
-						moved = swapTwoJobs(machine, *chromosome.groups[(machine.id + i) % maquinas], pair1, pair2,cont,cont2);
-						if (moved == true) {
-							return true;
-
-						}
-					}
-					cont2 = cont2 + 1;
-				}
-			}
-			cont = cont + 1;
-		}
-		//calculateFitness(chromosome);
-	}
-	else {
+	
 		int size_items = machine.totalItems;
 		double porcentaje_par = 19;
 		porcentaje_par = calculatePercent_par(size_items);
@@ -625,7 +593,6 @@ bool twoRoutineHelper(Chromosome& chromosome, Group& machine, int num_trabajos, 
 			}
 			cont = cont + 1;
 		}
-	}
 	//calculateFitness(chromosome);
 	return false;
 }
@@ -636,7 +603,7 @@ double calculatePercent_par(int size_items) {
 		percent = 19;
 	}
 	else if (size_items <= 400) {
-		percent = 200;
+		percent = 250;
 	}
 	else if (size_items <= 1000) {
 		percent = 500;
@@ -685,6 +652,7 @@ void main_localSearch(Chromosome& chromosome) {
 		}
 	}
 	groups_chromo = chromosome.totalGroups;
+  //printChromosomeAsJson(chromosome, true);
 	reorder_chromosome(chromosome,groups_chromo);
 	oneJobRoutine(chromosome);
 	oneByOneSwapRoutine(chromosome);

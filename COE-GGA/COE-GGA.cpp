@@ -68,25 +68,24 @@ void coevolution(Instance& instance, Chromosome& solution) {
     int sumStates[TOTALSPECIES] = { 0 };
 
     // Repetir el número especificado de iteraciones
-    for (int iteration = 1; iteration <= config->iterations; ++iteration) {
+    for (int iteration = 1; iteration <= 1; ++iteration) {
         
         // ************************ Especie 1 ************************
         // Aplicar GGA 
         GGA(&configsGGA[0], species[0],children, iteration);
-
         // ************************ Especie 2 ************************
         // Aplicar GGA 
-        GGA(&configsGGA[1], species[1], children, iteration);
+      //  GGA(&configsGGA[1], species[1], children, iteration);
 
         // ************************ Especie 3 ************************
         // Aplicar GGA 
-        GGA(&configsGGA[2], species[2], children, iteration);
+       // GGA(&configsGGA[2], species[2], children, iteration);
 
         // ************************ Especie 4 ************************
         // Aplicar GGA 
-        cout << "local";
-        main_localSearch(*species[3].population.chromosomes[0]);
-        cout << "termino";
+        //cout << "local";
+       // main_localSearch(*species[3].population.chromosomes[0]);
+        //cout << "termino";
 
         // Calcular el fitness de cada especie
         for (int i = 0; i < TOTALSPECIES; ++i) {
@@ -205,7 +204,7 @@ int main(int argc, char* argv[]) {
     // Luego, se crea una configuración inicial que se modificara si se proporciona un archivo de configuración adicional.
     if (argc > 2) {
         // Revisar debug_configuration.txt
-        readConfigurationFile(argv[2], instance.config);
+        readConfigurationFile("debug_configuration.txt", instance.config);
     }
 
     // Calcular el limite inferior de la instancia para BPP.
@@ -217,15 +216,15 @@ int main(int argc, char* argv[]) {
     Chromosome solution;
     coevolution(instance, solution);
     solution.time = (clock() - start) / (CLK_TCK * 1.0);
-
+    printChromosomeAsJson(solution, true);
     // Verificamos la solución
     //if (!allItemsIncluded(solution)) exit(3);
 
     // La solución devuelta se imprime en formato JSON en la consola.
     if (instance.config.verbose) {
-        cout << "Iteration: " << solution.iteration << endl;
-        cout << "Solution: " << solution.totalGroups << endl;
-        printChromosomeAsJson(solution, true);
+       // cout << "Iteration: " << solution.iteration << endl;
+       // cout << "Solution: " << solution.totalGroups << endl;
+       // printChromosomeAsJson(solution, true);
     }
     else {
         //printChromosomeAsJson(solution, true);

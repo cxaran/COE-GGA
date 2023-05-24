@@ -1,4 +1,5 @@
 #include "../include/fileio.h"
+#include "../include/localsearchh.h"
 
 // Lee el archivo de configuraci�n y devuelve una estructura Configuration con los valores correspondientes
 void readConfigurationFile(string fileName, ConfigurationCOE& config) {
@@ -112,10 +113,11 @@ Instance readInstanceFile(string fileName) {
 }
 
 // Funci�n para imprimir la informaci�n de un cromosoma en formato JSON.
-void printChromosomeAsJson(const Chromosome& chromosome, bool printGroups) {
+void printChromosomeAsJson(Chromosome& chromosome, bool printGroups) {
     cout << "{" << endl;
     cout << "  \"fitness\": {" << endl;
-    cout << "    \"value\": " << chromosome.fitness << endl;
+    cout << "    \"value\": " << chromosome.fitness << "," << endl;
+    cout << "    \"maxSpan\": " << finalMakeSpan(chromosome) << endl;
     cout << "  }," << endl;
     cout << "  \"group_count\": " << chromosome.totalGroups << "," << endl;
     cout << "  \"time\": " << chromosome.time << "," << endl;

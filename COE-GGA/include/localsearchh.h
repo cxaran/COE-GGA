@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
-#include "include/structures.h"
+#include "../include/structures.h"
 
 using namespace std;
 
